@@ -5,7 +5,8 @@
     "build": "remix build",
     "dev": "remix dev",
     "start": "remix-serve build",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "deploy": "gcloud run deploy crop-planner-web --source . --region europe-north1"
   },
   "dependencies": {
     "@remix-run/node": "^1.15.0",
