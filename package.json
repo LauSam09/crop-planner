@@ -6,12 +6,17 @@
     "dev": "remix dev",
     "start": "remix-serve build",
     "typecheck": "tsc",
+    "format:check": "prettier --check app/**/*.{ts,tsx}",
+    "format:write": "prettier --write app/**/*.{ts,tsx}",
+    "lint": "eslint app/**",
     "deploy": "gcloud run deploy crop-planner-web --source . --region europe-north1"
   },
   "dependencies": {
     "@remix-run/node": "^1.15.0",
     "@remix-run/react": "^1.15.0",
     "@remix-run/serve": "^1.15.0",
+    "firebase": "^9.20.0",
+    "firebase-admin": "^11.7.0",
     "isbot": "^3.6.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
@@ -22,6 +27,7 @@
     "@types/react": "^18.0.25",
     "@types/react-dom": "^18.0.8",
     "eslint": "^8.27.0",
+    "prettier": "^2.8.8",
     "typescript": "^4.8.4"
   },
   "engines": {
