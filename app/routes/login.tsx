@@ -36,10 +36,10 @@ export let action = async ({ request }: ActionArgs) => {
       switch (err.code) {
         case "auth/wrong-password":
         case "auth/user-not-found":
-          message = "Invalid email address or password.";
+          message = "Invalid email address or password";
           break;
         case "auth/too-many-requests":
-          message = "Too many attempts. Reset your password to continue.";
+          message = "Too many attempts - reset your password to continue";
           break;
         default:
           throw err;
