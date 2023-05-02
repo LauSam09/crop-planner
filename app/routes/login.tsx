@@ -66,7 +66,9 @@ export default function Login() {
 
       <Form method="post">
         {actionData?.errors.form ? (
-          <p style={{ color: "red" }}>{actionData.errors.form}</p>
+          <p className="mt-1 text-sm text-red-600 dark:text-red-500">
+            {actionData.errors.form}
+          </p>
         ) : null}
         <p>
           <label className="block text-sm font-medium leading-6 text-gray-900">
