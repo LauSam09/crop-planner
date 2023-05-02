@@ -1,6 +1,6 @@
 ﻿export const validateEmail = (email: FormDataEntryValue | null) => {
   if (!email) {
-    return "Email is required";
+    return "Email address is required";
   }
 
   if (typeof email !== "string" || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
