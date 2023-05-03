@@ -77,7 +77,7 @@ export default function Login() {
               type="email"
               name="email"
               defaultValue={actionData?.values.email}
-              className="block w-full rounded-md border-0 py-1.5 px-2 mt-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-inset focus:ring-green-600 sm:text-sm sm:leading-6"
+              className="block w-full rounded-md border py-1.5 px-2 mt-1 text-gray-900 shadow-sm placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-inset focus:ring-green-600 sm:text-sm sm:leading-6"
             />
           </label>
         </p>
@@ -92,7 +92,7 @@ export default function Login() {
             <input
               type="password"
               name="password"
-              className="block w-full rounded-md border-0 py-1.5 px-2 mt-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-inset focus:ring-green-600 sm:text-sm sm:leading-6"
+              className="block w-full rounded-md border py-1.5 px-2 mt-1 text-gray-900 shadow-sm placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-inset focus:ring-green-600 sm:text-sm sm:leading-6"
             />
           </label>
         </p>
