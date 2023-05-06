@@ -37,17 +37,13 @@ export async function createUserSession(idToken: string, redirectTo: string) {
 }
 
 export async function getUserSession(request: Request) {
-  console.log("Getting cookie session");
   const cookieSession = await storage.getSession(request.headers.get("Cookie"));
-  console.log("Getting token from cookie");
   const token = cookieSession.get("token");
   if (!token) {
-    console.log("No token - user is unauthenticated");
     return null;
   }
 
   try {
-    console.log("Verifying token");
     return await adminAuth.verifySessionCookie(token, true);
   } catch (error) {
     console.error(error);
