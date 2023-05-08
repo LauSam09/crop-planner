@@ -26,23 +26,23 @@ export const loader = async ({ request }: LoaderArgs) => {
 export default function Index() {
   return (
     <>
-      <nav className="w-full bg-white z-50 fixed top-0 border-b border-gray-200 dark:border-gray-700 dark:bg-gray-800">
+      <nav className="fixed top-0 z-50 w-full border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800">
         <div className="p-3">
           <Link to="/">
-            <span className="text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">
+            <span className="whitespace-nowrap text-xl font-semibold dark:text-white sm:text-2xl">
               Crop Planner
             </span>
           </Link>
         </div>
       </nav>
 
-      <aside className="fixed top-0 left-0 w-64 h-screen pt-20 border-r bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
-        <div className="h-full px-3 pb-4 overflow-y-auto ">
+      <aside className="fixed left-0 top-0 h-screen w-64 border-r border-gray-200 bg-white pt-20 dark:border-gray-700 dark:bg-gray-800">
+        <div className="h-full overflow-y-auto px-3 pb-4 ">
           <ul className="space-y-2 font-medium">
             <li>
               <Link
                 to="/"
-                className="flex p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                className="flex rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
               >
                 Dashboard
               </Link>
@@ -50,7 +50,7 @@ export default function Index() {
             <li>
               <Link
                 to="/crops"
-                className="flex p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                className="flex rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
               >
                 Crops
               </Link>
@@ -59,14 +59,14 @@ export default function Index() {
         </div>
       </aside>
 
-      <div className="p-4 ml-64 min-h-screen dark:bg-gray-900">
+      <div className="ml-64 min-h-screen p-4 dark:bg-gray-900">
         <div className="mt-14">
           <div className="flex justify-center">
-            <div className="dark:bg-gray-800 p-4 rounded-lg">
-              <h1 className="text-center mb-4 text-2xl font-extrabold leading-none tracking-tight text-gray-900 md:text-3xl lg:text-4xl dark:text-white">
+            <div className="rounded-lg p-4 dark:bg-gray-800">
+              <h1 className="mb-4 text-center text-2xl font-extrabold leading-none tracking-tight text-gray-900 dark:text-white md:text-3xl lg:text-4xl">
                 Welcome to Crop Planner
               </h1>
-              <Form method="post" className="text-center mt-8">
+              <Form method="post" className="mt-8 text-center">
                 <button
                   type="submit"
                   className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"

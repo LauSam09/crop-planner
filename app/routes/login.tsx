@@ -61,8 +61,8 @@ export default function Login() {
   const actionData = useActionData();
 
   return (
-    <div className="dark:bg-gray-900 h-screen flex justify-center items-center">
-      <div className="p-4 w-80 dark:bg-gray-800 rounded">
+    <div className="flex h-screen items-center justify-center dark:bg-gray-900">
+      <div className="w-80 rounded p-4 dark:bg-gray-800">
         <h1 className="text-base font-semibold leading-7 text-gray-900 dark:text-white">
           Login
         </h1>
@@ -80,7 +80,7 @@ export default function Login() {
                 type="email"
                 name="email"
                 defaultValue={actionData?.values.email}
-                className="block w-full rounded-md border py-1.5 px-2 mt-1 text-gray-900 shadow-sm placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-inset focus:ring-green-600 sm:text-sm sm:leading-6"
+                className="mt-1 block w-full rounded-md border px-2 py-1.5 text-gray-900 shadow-sm outline-none placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-600 sm:text-sm sm:leading-6"
               />
             </label>
           </p>
@@ -90,12 +90,12 @@ export default function Login() {
             </p>
           ) : null}
           <p>
-            <label className="block text-sm font-medium leading-6 text-gray-900 dark:text-white mt-2">
+            <label className="mt-2 block text-sm font-medium leading-6 text-gray-900 dark:text-white">
               Password
               <input
                 type="password"
                 name="password"
-                className="block w-full rounded-md border py-1.5 px-2 mt-1 text-gray-900 shadow-sm placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-inset focus:ring-green-600 sm:text-sm sm:leading-6"
+                className="mt-1 block w-full rounded-md border px-2 py-1.5 text-gray-900 shadow-sm outline-none placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-600 sm:text-sm sm:leading-6"
               />
             </label>
           </p>
@@ -104,10 +104,10 @@ export default function Login() {
               {actionData.errors.password}
             </p>
           ) : null}
-          <div className="flex justify-end items-center gap-2 w-full mt-2">
+          <div className="mt-2 flex w-full items-center justify-end gap-2">
             <Link
               to="/signup"
-              className="rounded-md px-3 py-[6px] font-medium text-green-600 dark:text-green-500 hover:underline focus-visible:outline focus-visible:outline-2"
+              className="rounded-md px-3 py-[6px] font-medium text-green-600 hover:underline focus-visible:outline focus-visible:outline-2 dark:text-green-500"
             >
               Create Account
             </Link>

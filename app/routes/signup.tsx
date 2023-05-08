@@ -76,7 +76,7 @@ export default function SignUp() {
             <input
               type="email"
               name="email"
-              className="block w-full rounded-md border py-1.5 px-2 mt-1 text-gray-900 shadow-sm placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-inset focus:ring-green-600 sm:text-sm sm:leading-6"
+              className="mt-1 block w-full rounded-md border px-2 py-1.5 text-gray-900 shadow-sm outline-none placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-600 sm:text-sm sm:leading-6"
             />
           </label>
         </p>
@@ -86,12 +86,12 @@ export default function SignUp() {
           </p>
         ) : null}
         <p>
-          <label className="block text-sm font-medium leading-6 text-gray-900 mt-2">
+          <label className="mt-2 block text-sm font-medium leading-6 text-gray-900">
             Password
             <input
               type="password"
               name="password"
-              className="block w-full rounded-md border py-1.5 px-2 mt-1 text-gray-900 shadow-sm placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-inset focus:ring-green-600 sm:text-sm sm:leading-6"
+              className="mt-1 block w-full rounded-md border px-2 py-1.5 text-gray-900 shadow-sm outline-none placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-600 sm:text-sm sm:leading-6"
             />
           </label>
         </p>
@@ -100,7 +100,7 @@ export default function SignUp() {
             {actionData.errors.password}
           </p>
         ) : null}
-        <div className="flex justify-end items-center w-full mt-2">
+        <div className="mt-2 flex w-full items-center justify-end">
           <button
             type="submit"
             className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
