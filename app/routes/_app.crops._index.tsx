@@ -1,6 +1,7 @@
 import { json } from "@remix-run/node";
 import type { V2_MetaFunction } from "@remix-run/react";
 import { useLoaderData } from "@remix-run/react";
+import { Sowing } from "~/components/Sowing";
 
 import type { Crop } from "~/models/crop";
 
@@ -19,16 +20,34 @@ export const loader = () => {
         currentStage: "planning",
         stages: {
           planning: {
-            date: "2023-05-20T09:00:00Z",
+            date: "2023-06-03T09:00:00Z",
           },
         },
       },
       {
         created: "2023-01-01T09:00:00Z",
-        currentStage: "planning",
+        currentStage: "growing",
         stages: {
           planning: {
             date: "2023-05-27T09:00:00Z",
+          },
+          growing: {
+            date: "2023-05-27T09:00:00Z",
+          },
+        },
+      },
+      {
+        created: "2023-01-01T09:00:00Z",
+        currentStage: "storing",
+        stages: {
+          planning: {
+            date: "2023-04-23T09:00:00Z",
+          },
+          growing: {
+            date: "2023-04-23T09:00:00Z",
+          },
+          storing: {
+            date: "2023-05-30T09:00:00Z",
           },
         },
       },
@@ -45,15 +64,22 @@ export const loader = () => {
         currentStage: "planning",
         stages: {
           planning: {
-            date: "2023-05-27T09:00:00Z",
+            date: "2023-06-03T09:00:00Z",
           },
         },
       },
     ],
   };
 
+  const cauliflower: Crop = {
+    id: "3",
+    name: "Cauliflower",
+    created: "2023-01-01T09:00:00Z",
+    sowings: [],
+  };
+
   return json({
-    data: [carrots, potatoes],
+    data: [carrots, potatoes, cauliflower],
   });
 };
 
@@ -61,24 +87,23 @@ export default function Index() {
   const { data } = useLoaderData<typeof loader>();
 
   return (
-    <div className="space-y-3 p-2">
+    <div className="mx-auto max-w-lg space-y-3 p-2  ">
       {data.map((crop) => (
         <div
           key={crop.id}
-          className="rounded border border-gray-200 p-2 text-center"
+          className="rounded border border-gray-200 p-2 text-center dark:border-gray-700 dark:bg-gray-800"
         >
-          <p>{crop.name}</p>
+          <p className="text-lg">{crop.name}</p>
           {crop.sowings.length === 0 ? (
             <p>No sowings yet</p>
           ) : (
             <div className="mt-2 space-y-2">
-              {crop.sowings.map((_, index) => (
-                <div
+              {crop.sowings.map((sowing, index) => (
+                <Sowing
                   key={index}
-                  className="rounded border border-blue-500 bg-blue-500/40 p-1 text-center"
-                >
-                  Sow in 3 weeks
-                </div>
+                  currentStage={sowing.currentStage}
+                  stages={sowing.stages}
+                />
               ))}
             </div>
           )}

@@ -1,6 +1,8 @@
+export type Stage = "planning" | "growing" | "storing";
+
 export interface Sowing {
   created: string; // TODO: Investigate timestamp type
-  currentStage: "planning";
+  currentStage: Stage;
   stages: {
     planning?: {
       date: string; // TODO: Investigate timestamp type
