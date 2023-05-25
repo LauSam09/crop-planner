@@ -5,6 +5,11 @@ import classNames from "classnames";
 export default function Layout() {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
+  const toggleMobileSidebarOpen = () =>
+    setMobileSidebarOpen((previous) => !previous);
+
+  const closeMobileSideBar = () => setMobileSidebarOpen(false);
+
   return (
     <>
       <>
@@ -16,7 +21,7 @@ export default function Layout() {
                 data-drawer-toggle="logo-sidebar"
                 aria-controls="logo-sidebar"
                 type="button"
-                onClick={() => setMobileSidebarOpen((previous) => !previous)}
+                onClick={toggleMobileSidebarOpen}
                 className="inline-flex items-center rounded-lg p-2 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 sm:hidden"
               >
                 <span className="sr-only">Open sidebar</span>
@@ -56,6 +61,7 @@ export default function Layout() {
               <li>
                 <Link
                   to="/"
+                  onClick={closeMobileSideBar}
                   className="flex rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                 >
                   Dashboard
@@ -64,6 +70,7 @@ export default function Layout() {
               <li>
                 <Link
                   to="/crops"
+                  onClick={closeMobileSideBar}
                   className="flex rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                 >
                   Crops
@@ -73,7 +80,7 @@ export default function Layout() {
           </div>
         </aside>
         <div
-          onClick={() => setMobileSidebarOpen(false)}
+          onClick={closeMobileSideBar}
           className={classNames(
             "absolute z-30 h-full w-full bg-gray-900/50 sm:hidden cursor-pointer",
             { hidden: !mobileSidebarOpen }
