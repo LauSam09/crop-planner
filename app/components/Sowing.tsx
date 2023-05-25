@@ -14,9 +14,7 @@ export const Sowing = (props: SowingProps) => {
 
   switch (currentStage) {
     case "planning":
-      text = `Planned for ${new Date(
-        stages.planning!.date
-      ).toLocaleDateString()}`;
+      text = `Sow on ${new Date(stages.planning!.date).toLocaleDateString()}`;
       break;
     case "growing":
       text = `Growing since ${new Date(

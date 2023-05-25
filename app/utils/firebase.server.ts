@@ -26,6 +26,8 @@ if (!admin.apps.length) {
   });
 }
 
+export const db = admin.firestore();
+
 let Firebase;
 
 // @ts-ignore
