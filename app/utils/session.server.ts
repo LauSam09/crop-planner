@@ -19,7 +19,8 @@ const storage = createCookieSessionStorage({
     secrets: [sessionSecret],
     sameSite: "lax",
     path: "/",
-    maxAge: 60 * 60 * 24 * 30,
+    maxAge: 60 * 60 * 24 * 10, // Firebase auth expires in 14 days and I'm not
+    // sure how to configure this currently.
     httpOnly: true,
   },
 });
