@@ -115,7 +115,7 @@ export default function Login() {
               to="/signup"
               className="rounded-md px-3 py-[6px] font-medium text-green-600 hover:underline focus-visible:outline focus-visible:outline-2 dark:text-green-500"
             >
-              Create Account
+              Create account
             </Link>
             <button
               type="submit"
