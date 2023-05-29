@@ -69,7 +69,10 @@ export default function Login() {
 
         <Form method="post">
           {actionData?.errors.form ? (
-            <p className="mt-1 text-sm text-red-600 dark:text-red-500">
+            <p
+              role="alert"
+              className="mt-1 text-sm text-red-600 dark:text-red-500"
+            >
               {actionData.errors.form}
             </p>
           ) : null}
@@ -85,7 +88,10 @@ export default function Login() {
             </label>
           </p>
           {actionData?.errors.email ? (
-            <p className="mt-1 text-sm text-red-600 dark:text-red-500">
+            <p
+              role="alert"
+              className="mt-1 text-sm text-red-600 dark:text-red-500"
+            >
               {actionData.errors.email}
             </p>
           ) : null}
