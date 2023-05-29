@@ -1,4 +1,3 @@
-import { collection, getDocs, query, where } from "firebase/firestore";
 import type { Crop } from "~/models/crop";
 import { db } from "~/utils/firebase.server";
 
@@ -75,8 +74,10 @@ export const fetchCrops = async (userId: string) => {
     return [carrots, potatoes, cauliflower];
   }
 
-  const q = query(collection(db, "crops"), where("userId", "==", userId));
-  const querySnapshot = await getDocs(q);
+  const querySnapshot = await db
+    .collection("crops")
+    .where("userId", "==", userId)
+    .get();
 
   const data: Array<Crop> = [];
 

@@ -10,7 +10,6 @@ import {
   signOut,
 } from "@firebase/auth";
 import { initializeApp } from "@firebase/app";
-import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
@@ -27,7 +26,7 @@ if (!admin.apps.length) {
   });
 }
 
-// export const db = admin.firestore();
+export const db = admin.firestore();
 
 let Firebase;
 
@@ -35,8 +34,6 @@ let Firebase;
 if (!Firebase?.apps.length) {
   Firebase = initializeApp(firebaseConfig);
 }
-
-export const db = getFirestore(Firebase);
 
 export const adminAuth = admin.auth();
 
