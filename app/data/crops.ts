@@ -5,6 +5,7 @@ const carrots: Crop = {
   id: "1",
   name: "Carrots",
   created: "2023-01-01T09:00:00Z",
+  userId: "1",
   sowings: [
     {
       created: "2023-01-01T09:00:00Z",
@@ -49,6 +50,7 @@ const potatoes: Crop = {
   id: "2",
   name: "Potatoes",
   created: "2023-01-01T09:00:00Z",
+  userId: "1",
   sowings: [
     {
       created: "2023-01-01T09:00:00Z",
@@ -66,6 +68,7 @@ const cauliflower: Crop = {
   id: "3",
   name: "Cauliflower",
   created: "2023-01-01T09:00:00Z",
+  userId: "1",
   sowings: [],
 };
 
@@ -86,4 +89,16 @@ export const fetchCrops = async (userId: string) => {
   );
 
   return data;
+};
+
+export const fetchCrop = async (userId: string, cropId: string) => {
+  const querySnapshot = await db.collection("crops").doc(cropId).get();
+
+  const crop = { ...querySnapshot.data(), id: querySnapshot.id } as Crop;
+
+  if (crop.userId !== userId) {
+    throw new Error("Crop not found");
+  }
+
+  return crop;
 };

@@ -20,5 +20,6 @@ export interface Crop {
   id: string;
   name: string;
   created: string; // TODO: Investigate timestamp type
+  userId: string;
   sowings: Array<Sowing>;
 }
