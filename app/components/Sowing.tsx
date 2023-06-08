@@ -1,10 +1,19 @@
 import classNames from "classnames";
-import type { Sowing as SowingModel } from "~/models/crop";
 import type { Stage } from "~/models/crop";
 
 interface SowingProps {
   currentStage: Stage;
-  stages: SowingModel["stages"];
+  stages: {
+    planning?: {
+      date: string;
+    };
+    growing?: {
+      date: string;
+    };
+    storing?: {
+      date: string;
+    };
+  };
 }
 
 export const Sowing = (props: SowingProps) => {

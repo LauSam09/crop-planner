@@ -62,7 +62,7 @@ export default function CropDetails() {
   const { data } = useLoaderData<typeof loader>();
 
   return (
-    <div>
+    <div className="mx-auto max-w-lg">
       <div>{data.name}</div>
       <h2>Sowings</h2>
       {data.sowings.length > 0 ? (
