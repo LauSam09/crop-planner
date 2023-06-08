@@ -90,9 +90,9 @@ export default function Layout() {
           <span className="sr-only">Sidebar backdrop</span>
         </div>
       </>
-      <div className="mt-14 p-4 dark:bg-gray-900 sm:ml-64">
+      <main className="mt-14 p-4 dark:bg-gray-900 sm:ml-64">
         <Outlet />
-      </div>
+      </main>
     </>
   );
 }

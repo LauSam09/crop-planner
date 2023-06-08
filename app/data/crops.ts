@@ -72,6 +72,12 @@ const cauliflower: Crop = {
   sowings: [],
 };
 
+const crops: {[key: string]: Crop} = {
+  "1": carrots,
+  "2": potatoes,
+  "3": cauliflower,
+}
+
 export const fetchCrops = async (userId: string) => {
   if (process.env.MOCKING) {
     return [carrots, potatoes, cauliflower];
@@ -92,6 +98,10 @@ export const fetchCrops = async (userId: string) => {
 };
 
 export const fetchCrop = async (userId: string, cropId: string) => {
+  if (process.env.MOCKING) {
+    return crops[cropId];
+  }
+
   const querySnapshot = await db.collection("crops").doc(cropId).get();
 
   const crop = { ...querySnapshot.data(), id: querySnapshot.id } as Crop;
