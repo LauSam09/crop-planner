@@ -27,20 +27,78 @@ interface PlantStageProps {
   planted: Date | undefined;
 }
 
+function PlannedIcon() {
+  return (
+    <svg
+      height={20}
+      viewBox="0 0 10 10"
+      xmlns="http://www.w3.org/2000/svg"
+      stroke="rgb(34 197 94 / 100)"
+      fill="none"
+      className="z-10"
+    >
+      <circle r={4} cx={5} cy={5} />
+    </svg>
+  );
+}
+
+function PlantedIcon() {
+  return (
+    <svg
+      height={20}
+      viewBox="0 0 10 10"
+      xmlns="http://www.w3.org/2000/svg"
+      stroke="rgb(34 197 94 / 100)"
+      fill="rgb(34 197 94 / 100)"
+      className="z-10"
+    >
+      <circle r={4} cx={5} cy={5} />
+    </svg>
+  );
+}
+
+function HarvestIcon() {
+  return (
+    <svg
+      height={20}
+      viewBox="0 0 10 10"
+      xmlns="http://www.w3.org/2000/svg"
+      stroke="rgb(249 115 22 / 100)"
+      fill="none"
+      className="z-10"
+    >
+      <circle r={4} cx={5} cy={5} />
+    </svg>
+  );
+}
+
+function HarvestedIcon() {
+  return (
+    <svg
+      height={20}
+      viewBox="0 0 10 10"
+      xmlns="http://www.w3.org/2000/svg"
+      stroke="rgb(249 115 22 / 100)"
+      fill="rgb(249 115 22 / 100)"
+      className="z-10"
+    >
+      <circle r={4} cx={5} cy={5} />
+    </svg>
+  );
+}
+
 function PlantStage(props: PlantStageProps) {
   const { planned, planted } = props;
 
-  if (planted) {
-    <div className="flex flex-1 justify-center gap-1 rounded border border-dashed border-green-500 bg-green-500/40 p-2 text-center">
-      <span className="hidden sm:inline-block">Planted</span>
-      <span>{planted.toLocaleDateString()}</span>
-    </div>;
-  }
+  const date = planted ?? planned;
 
   return (
-    <div className="flex flex-1 justify-center gap-1 rounded border border-green-500 bg-green-500/40 p-2 text-center">
-      <span className="hidden sm:inline-block">Planted</span>
-      <span>{planned.toLocaleDateString()}</span>
+    <div className="flex flex-1 flex-col items-stretch text-center">
+      <div>{date.toLocaleDateString()}</div>
+      <div className="relative flex justify-center">
+        {planted ? <PlantedIcon /> : <PlannedIcon />}
+        <span className="absolute left-[calc(50%+8px)] top-[calc(50%-1px)] w-[calc(50%-8px)] border-2 border-b border-black dark:border-gray-600"></span>
+      </div>
     </div>
   );
 }
@@ -52,18 +110,15 @@ interface HarvestStageProps {
 function HarvestStage(props: HarvestStageProps) {
   const { harvested } = props;
 
-  if (!harvested) {
-    return (
-      <div className="flex flex-1 gap-1 rounded border border-dashed border-orange-500 bg-orange-500/40 p-2 text-center italic">
-        <span className="hidden sm:inline-block">Harvest</span>
-      </div>
-    );
-  }
+  const date = harvested ?? new Date();
 
   return (
-    <div className="flex flex-1 gap-1 rounded border border-orange-500 bg-orange-500/40 p-2 text-center">
-      <span className="hidden sm:inline-block">Harvested</span>
-      <span>{harvested.toLocaleDateString()}</span>
+    <div className="flex flex-1 flex-col items-stretch text-center">
+      <div>{date.toLocaleDateString()}</div>
+      <div className="relative flex justify-center">
+        {harvested ? <HarvestedIcon /> : <HarvestIcon />}
+        <span className="absolute left-[0] top-[calc(50%-1px)] w-[calc(50%-8px)] border-2 border-b border-black dark:border-gray-600"></span>
+      </div>
     </div>
   );
 }
@@ -75,7 +130,8 @@ function SowingMenu() {
         height="20px"
         viewBox="0 0 16 16"
         xmlns="http://www.w3.org/2000/svg"
-        fill="#000000"
+        fill="currentColor"
+        className="text-black dark:text-white"
       >
         <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
       </svg>
@@ -93,9 +149,11 @@ function Sowing(props: SowingProps) {
   const { planned, planted, harvested } = props;
 
   return (
-    <div className="mb-2 flex gap-2">
-      <PlantStage planned={planned} planted={planted} />
-      <HarvestStage harvested={harvested} />
+    <div className="mb-2 flex">
+      <div className="flex flex-1 pb-1">
+        <PlantStage planned={planned} planted={planted} />
+        <HarvestStage harvested={harvested} />
+      </div>
       <SowingMenu />
     </div>
   );
@@ -108,16 +166,6 @@ export default function CropDetails() {
     <div className="mx-auto flex max-w-lg flex-col gap-2">
       <div>{data.name}</div>
       <h2>Sowings</h2>
-      {/* TODO: CSS Grid */}
-      <div className="mb-2 flex gap-2 font-bold sm:hidden">
-        <div className="flex-1 rounded border border-green-500 bg-green-500/40 p-2 text-center">
-          Planted
-        </div>
-        <div className="flex-1 rounded border border-orange-500 bg-orange-500/40 p-2 text-center">
-          Harvested
-        </div>
-        <div className="w-[46px]"></div>
-      </div>
       {data.sowings.length > 0 ? (
         <ul>
           {data.sowings.map((sowing, key) => (
