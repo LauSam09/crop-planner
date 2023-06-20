@@ -1,5 +1,5 @@
 import type { ActionArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
 import type { V2_MetaFunction } from "@remix-run/react";
 import { useLoaderData } from "@remix-run/react";
 
@@ -12,30 +12,65 @@ export const meta: V2_MetaFunction = () => {
 
 export const loader = async ({ request, params }: ActionArgs) => {
   const user = await getUserSession(request);
+
+  if (!user) {
+    return redirect("/login");
+  }
+
   const data = await fetchCrop(user!.uid, params.cropId!);
 
   return json({ data });
 };
 
-function PlantStage() {
+interface PlantStageProps {
+  planned: Date;
+  planted: Date | undefined;
+}
+
+function PlantStage(props: PlantStageProps) {
+  const { planned, planted } = props;
+
+  if (planted) {
+    <div className="flex flex-1 justify-center gap-1 rounded border border-dashed border-green-500 bg-green-500/40 p-2 text-center">
+      <span className="hidden sm:inline-block">Planted</span>
+      <span>{planted.toLocaleDateString()}</span>
+    </div>;
+  }
+
   return (
-    <div className="rounded border border-green-500 bg-green-500/40 p-2">
-      02/04/22
+    <div className="flex flex-1 justify-center gap-1 rounded border border-green-500 bg-green-500/40 p-2 text-center">
+      <span className="hidden sm:inline-block">Planted</span>
+      <span>{planned.toLocaleDateString()}</span>
     </div>
   );
 }
 
-function HarvestStage() {
+interface HarvestStageProps {
+  harvested: Date | undefined;
+}
+
+function HarvestStage(props: HarvestStageProps) {
+  const { harvested } = props;
+
+  if (!harvested) {
+    return (
+      <div className="flex flex-1 gap-1 rounded border border-dashed border-orange-500 bg-orange-500/40 p-2 text-center italic">
+        <span className="hidden sm:inline-block">Harvest</span>
+      </div>
+    );
+  }
+
   return (
-    <div className="rounded border border-orange-500 bg-orange-500/40 p-2">
-      23/04/22
+    <div className="flex flex-1 gap-1 rounded border border-orange-500 bg-orange-500/40 p-2 text-center">
+      <span className="hidden sm:inline-block">Harvested</span>
+      <span>{harvested.toLocaleDateString()}</span>
     </div>
   );
 }
 
 function SowingMenu() {
   return (
-    <button className="rounded border">
+    <button className="rounded border px-3">
       <svg
         height="20px"
         viewBox="0 0 16 16"
@@ -48,11 +83,19 @@ function SowingMenu() {
   );
 }
 
-function Sowing() {
+interface SowingProps {
+  planned: Date;
+  planted: Date | undefined;
+  harvested: Date | undefined;
+}
+
+function Sowing(props: SowingProps) {
+  const { planned, planted, harvested } = props;
+
   return (
     <div className="mb-2 flex gap-2">
-      <PlantStage />
-      <HarvestStage />
+      <PlantStage planned={planned} planted={planted} />
+      <HarvestStage harvested={harvested} />
       <SowingMenu />
     </div>
   );
@@ -62,13 +105,36 @@ export default function CropDetails() {
   const { data } = useLoaderData<typeof loader>();
 
   return (
-    <div className="mx-auto max-w-lg">
+    <div className="mx-auto flex max-w-lg flex-col gap-2">
       <div>{data.name}</div>
       <h2>Sowings</h2>
+      {/* TODO: CSS Grid */}
+      <div className="mb-2 flex gap-2 font-bold sm:hidden">
+        <div className="flex-1 rounded border border-green-500 bg-green-500/40 p-2 text-center">
+          Planted
+        </div>
+        <div className="flex-1 rounded border border-orange-500 bg-orange-500/40 p-2 text-center">
+          Harvested
+        </div>
+        <div className="w-[46px]"></div>
+      </div>
       {data.sowings.length > 0 ? (
         <ul>
           {data.sowings.map((sowing, key) => (
-            <Sowing key={key} />
+            <Sowing
+              key={key}
+              planned={new Date(sowing.stages.planning?.date!)}
+              planted={
+                sowing.stages.growing?.date
+                  ? new Date(sowing.stages.growing?.date!)
+                  : undefined
+              }
+              harvested={
+                sowing.stages.storing?.date
+                  ? new Date(sowing.stages.storing?.date!)
+                  : undefined
+              }
+            />
           ))}
         </ul>
       ) : (

@@ -1,4 +1,4 @@
-import { firestore } from "firebase-admin";
+import type { firestore } from "firebase-admin";
 
 export type Stage = "planning" | "growing" | "storing";
 

@@ -1,5 +1,5 @@
 import type { ActionArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
 import type { V2_MetaFunction } from "@remix-run/react";
 import { Link } from "@remix-run/react";
 import { useLoaderData } from "@remix-run/react";
@@ -14,6 +14,11 @@ export const meta: V2_MetaFunction = () => {
 
 export const loader = async ({ request }: ActionArgs) => {
   const user = await getUserSession(request);
+
+  if (!user) {
+    return redirect("/login");
+  }
+
   const data = await fetchCrops(user!.uid);
 
   return json({
