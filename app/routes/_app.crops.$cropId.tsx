@@ -57,7 +57,7 @@ function PlantedIcon() {
   );
 }
 
-function HarvestIcon() {
+function UnharvestedIcon() {
   return (
     <svg
       height={20}
@@ -93,11 +93,11 @@ function PlantStage(props: PlantStageProps) {
   const date = planted ?? planned;
 
   return (
-    <div className="flex flex-1 flex-col items-stretch text-center">
+    <div className="flex flex-col items-stretch text-center">
       <div>{date.toLocaleDateString()}</div>
       <div className="relative flex justify-center">
         {planted ? <PlantedIcon /> : <PlannedIcon />}
-        <span className="absolute left-[calc(50%+8px)] top-[calc(50%-1px)] w-[calc(50%-8px)] border-2 border-b border-black dark:border-gray-600"></span>
+        <span className="absolute left-[calc(50%+8px)] top-[calc(50%-1px)] w-[calc(50%-8px)] border-2 border-b border-gray-300 dark:border-gray-600" />
       </div>
     </div>
   );
@@ -113,11 +113,11 @@ function HarvestStage(props: HarvestStageProps) {
   const date = harvested ?? new Date();
 
   return (
-    <div className="flex flex-1 flex-col items-stretch text-center">
+    <div className="mr-2 flex flex-col items-stretch text-center">
       <div>{date.toLocaleDateString()}</div>
       <div className="relative flex justify-center">
-        {harvested ? <HarvestedIcon /> : <HarvestIcon />}
-        <span className="absolute left-[0] top-[calc(50%-1px)] w-[calc(50%-8px)] border-2 border-b border-black dark:border-gray-600"></span>
+        {harvested ? <HarvestedIcon /> : <UnharvestedIcon />}
+        <span className="absolute left-[0] top-[calc(50%-1px)] w-[calc(50%-8px)] border-2 border-b border-gray-300 dark:border-gray-600"></span>
       </div>
     </div>
   );
@@ -152,6 +152,12 @@ function Sowing(props: SowingProps) {
     <div className="mb-2 flex">
       <div className="flex flex-1 pb-1">
         <PlantStage planned={planned} planted={planted} />
+        <div className="flex flex-1 flex-col items-stretch">
+          <div className="h-6" />
+          <div className="relative h-5">
+            <span className="absolute top-[calc(50%-1px)] w-full border-2 border-b border-gray-300 dark:border-gray-600" />
+          </div>
+        </div>
         <HarvestStage harvested={harvested} />
       </div>
       <SowingMenu />
@@ -164,8 +170,8 @@ export default function CropDetails() {
 
   return (
     <div className="mx-auto flex max-w-lg flex-col gap-2">
-      <div>{data.name}</div>
-      <h2>Sowings</h2>
+      <h1 className="text-xl">{data.name}</h1>
+      <h2 className="text-lg">Sowings</h2>
       {data.sowings.length > 0 ? (
         <ul>
           {data.sowings.map((sowing, key) => (

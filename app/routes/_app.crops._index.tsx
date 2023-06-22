@@ -38,7 +38,7 @@ export default function Index() {
   }
 
   return (
-    <div className="mx-auto max-w-lg space-y-3 p-2">
+    <div className="mx-auto flex max-w-lg flex-col gap-4 p-2">
       {data.map((crop) => (
         <Link key={crop.id} to={`/crops/${crop.id}`}>
           <div className="rounded border border-gray-200 p-2 text-center dark:border-gray-700 dark:bg-gray-800">
