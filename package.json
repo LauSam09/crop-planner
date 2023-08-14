@@ -5,6 +5,7 @@
     "build": "remix build",
     "dev": "remix dev",
     "start": "remix-serve build",
+    "start:local": "dotenv -e .env remix-serve build",
     "typecheck": "tsc",
     "format:check": "prettier --check app/**/*.{ts,tsx}",
     "format:write": "prettier --write app/**/*.{ts,tsx}",
