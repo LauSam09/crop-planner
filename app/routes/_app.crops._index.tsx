@@ -1,8 +1,7 @@
 import type { ActionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import type { V2_MetaFunction } from "@remix-run/react";
-import { Link } from "@remix-run/react";
-import { useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData } from "@remix-run/react";
 
 import { Sowing } from "~/components/Sowing";
 import { fetchCrops } from "~/data/crops";

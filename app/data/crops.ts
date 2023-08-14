@@ -120,7 +120,7 @@ export const fetchCrops = async (userId: string) => {
   const data: Array<CropEntity> = [];
 
   querySnapshot.forEach((doc) =>
-    data.push({ ...doc.data(), id: doc.id } as CropEntity)
+    data.push({ ...doc.data(), id: doc.id } as CropEntity),
   );
 
   return data.map(mapFn);
