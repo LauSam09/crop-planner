@@ -12,6 +12,7 @@ export const meta: V2_MetaFunction = () => {
 };
 
 export const loader = async ({ request, params }: ActionArgs) => {
+  // TODO: https://remix.run/docs/en/1.19.3/pages/faq#how-can-i-have-a-parent-route-loader-validate-the-user-and-protect-all-child-routes
   const user = await getUserSession(request);
 
   if (!user) {
