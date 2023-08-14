@@ -41,7 +41,7 @@ export default function CropDetails() {
               key={i}
               number={data.sowings.length - i}
               currentStage={sowing.currentStage}
-              date={new Date(sowing.stages[sowing.currentStage]?.date!)}
+              date={new Date(sowing.stages[sowing.currentStage]!.date!)}
             />
           ))}
         </ul>

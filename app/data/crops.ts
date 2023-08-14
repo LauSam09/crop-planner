@@ -1,4 +1,4 @@
-import type { Crop, CropEntity } from "~/models/crop";
+import type { Crop, CropEntity, Sowing } from "~/models/crop";
 import { db } from "~/utils/firebase.server";
 
 const carrots: Crop = {
@@ -120,7 +120,7 @@ export const fetchCrops = async (userId: string) => {
   const data: Array<CropEntity> = [];
 
   querySnapshot.forEach((doc) =>
-    data.push({ ...doc.data(), id: doc.id } as CropEntity),
+    data.push({ ...doc.data(), id: doc.id } as CropEntity)
   );
 
   return data.map(mapFn);
@@ -144,3 +144,13 @@ export const fetchCrop = async (userId: string, cropId: string) => {
 
   return mapFn(cropEntity);
 };
+
+export async function addSowing(
+  userId: string,
+  cropId: string,
+  sowing: Sowing
+) {
+  if (process.env.MOCKING) {
+    crops[cropId].sowings.push(sowing);
+  }
+}

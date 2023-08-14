@@ -27,12 +27,12 @@ export const Sowing = (props: SowingProps) => {
       break;
     case "growing":
       text = `Growing since ${new Date(
-        stages.growing!.date,
+        stages.growing!.date
       ).toLocaleDateString()}`;
       break;
     case "storing":
       text = `Harvested on ${new Date(
-        stages.storing!.date,
+        stages.storing!.date
       ).toLocaleDateString()}`;
       break;
     default:

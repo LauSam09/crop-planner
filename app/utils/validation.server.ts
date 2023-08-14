@@ -1,4 +1,6 @@
-﻿export const validateEmail = (email: FormDataEntryValue | null) => {
+﻿import type { Stage } from "~/models/crop";
+
+export const validateEmail = (email: FormDataEntryValue | null) => {
   if (!email) {
     return "Email address is required";
   }
@@ -19,7 +21,7 @@ export const validatePassword = (password: FormDataEntryValue | null) => {
 };
 
 export const validatePasswordRequirements = (
-  password: FormDataEntryValue | null,
+  password: FormDataEntryValue | null
 ) => {
   if (!password) {
     return "Password is required";
@@ -33,3 +35,22 @@ export const validatePasswordRequirements = (
     return "Password must be at least 8 characters";
   }
 };
+
+export function validateStage(formStage: FormDataEntryValue | null) {
+  if (formStage !== ("planning" satisfies Stage)) {
+    return "Stage must be 'planned'";
+  }
+}
+
+export function validateDate(formDate: FormDataEntryValue | null) {
+  if (!formDate) {
+    return "Date is required";
+  }
+
+  if (
+    typeof formDate != "string" ||
+    new Date(formDate).toString() === "Invalid Date"
+  ) {
+    return "Date format is invalid";
+  }
+}
