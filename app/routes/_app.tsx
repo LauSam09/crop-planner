@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, Outlet } from "@remix-run/react";
 import classNames from "classnames";
 
-export default function Layout() {
+const Layout = () => {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   const toggleMobileSidebarOpen = () =>
@@ -53,7 +53,7 @@ export default function Layout() {
             "fixed left-0 top-0 h-screen w-64 border-r z-40 border-gray-200 bg-white pt-20 transition-transform dark:border-gray-700 dark:bg-gray-800 sm:translate-x-0",
             {
               "-translate-x-full": !mobileSidebarOpen,
-            },
+            }
           )}
         >
           <div className="h-full overflow-y-auto px-3 pb-4 ">
@@ -84,7 +84,7 @@ export default function Layout() {
           onClick={closeMobileSideBar}
           className={classNames(
             "absolute z-30 h-full w-full bg-gray-900/50 sm:hidden cursor-pointer",
-            { hidden: !mobileSidebarOpen },
+            { hidden: !mobileSidebarOpen }
           )}
         >
           <span className="sr-only">Sidebar backdrop</span>
@@ -95,4 +95,6 @@ export default function Layout() {
       </main>
     </>
   );
-}
+};
+
+export default Layout;

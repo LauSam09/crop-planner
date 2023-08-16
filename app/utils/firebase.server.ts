@@ -37,25 +37,25 @@ if (!Firebase?.apps.length) {
 
 export const adminAuth = admin.auth();
 
-export async function signIn(email: string, password: string) {
+export const signIn = async (email: string, password: string) => {
   const auth = getAuth();
   return signInWithEmailAndPassword(auth, email, password);
-}
+};
 
-export async function signUp(email: string, password: string) {
+export const signUp = async (email: string, password: string) => {
   const auth = getAuth();
   return createUserWithEmailAndPassword(auth, email, password);
-}
+};
 
-export async function signOutFirebase() {
+export const signOutFirebase = async () => {
   await signOut(getAuth());
-}
+};
 
-export async function getSessionToken(idToken: string) {
+export const getSessionToken = async (idToken: string) => {
   const decodedToken = await adminAuth.verifyIdToken(idToken);
   if (new Date().getTime() / 1000 - decodedToken.auth_time > 5 * 60) {
     throw new Error("Recent sign in required");
   }
   const twoWeeks = 60 * 60 * 24 * 14 * 1000;
   return adminAuth.createSessionCookie(idToken, { expiresIn: twoWeeks });
-}
+};

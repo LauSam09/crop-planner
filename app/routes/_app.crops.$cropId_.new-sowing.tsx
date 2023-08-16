@@ -1,22 +1,22 @@
 import { json, redirect } from "@remix-run/node";
 import type { LoaderArgs, ActionArgs } from "@remix-run/node";
 import { Form, useActionData, type V2_MetaFunction } from "@remix-run/react";
+
 import { addSowing } from "~/data/crops";
 import { getUserSession, requireUserSession } from "~/utils/session.server";
-
 import { validateDate, validateStage } from "~/utils/validation.server";
 
 export const meta: V2_MetaFunction = () => {
   return [{ title: "Crop Planner" }];
 };
 
-export async function loader({ request }: LoaderArgs) {
+export const loader = async ({ request }: LoaderArgs) => {
   await requireUserSession(request);
 
   return json({});
-}
+};
 
-export async function action({ request, params: { cropId } }: ActionArgs) {
+export const action = async ({ request, params: { cropId } }: ActionArgs) => {
   const body = await request.formData();
   const stage = body.get("stage");
   const date = body.get("date");
@@ -39,9 +39,9 @@ export async function action({ request, params: { cropId } }: ActionArgs) {
   });
 
   return redirect(`/crops/${cropId}`);
-}
+};
 
-export default function NewSowing() {
+const NewSowing = () => {
   const actionData = useActionData<typeof action>();
 
   return (
@@ -86,4 +86,6 @@ export default function NewSowing() {
       </Form>
     </div>
   );
-}
+};
+
+export default NewSowing;

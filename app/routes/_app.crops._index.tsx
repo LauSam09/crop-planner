@@ -20,7 +20,7 @@ export const loader = async ({ request }: ActionArgs) => {
   });
 };
 
-export default function Index() {
+const Index = () => {
   const { data } = useLoaderData<typeof loader>();
 
   if (data.length === 0) {
@@ -55,4 +55,6 @@ export default function Index() {
       ))}
     </div>
   );
-}
+};
+
+export default Index;

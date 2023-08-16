@@ -5,6 +5,8 @@ export const meta: V2_MetaFunction = () => {
   return [{ title: "Crop Planner" }];
 };
 
-export default function Index() {
+const Index = () => {
   return <Outlet />;
-}
+};
+
+export default Index;

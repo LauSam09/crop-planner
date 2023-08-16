@@ -36,13 +36,13 @@ export const validatePasswordRequirements = (
   }
 };
 
-export function validateStage(formStage: FormDataEntryValue | null) {
+export const validateStage = (formStage: FormDataEntryValue | null) => {
   if (formStage !== ("planning" satisfies Stage)) {
     return "Stage must be 'planned'";
   }
-}
+};
 
-export function validateDate(formDate: FormDataEntryValue | null) {
+export const validateDate = (formDate: FormDataEntryValue | null) => {
   if (!formDate) {
     return "Date is required";
   }
@@ -53,4 +53,4 @@ export function validateDate(formDate: FormDataEntryValue | null) {
   ) {
     return "Date format is invalid";
   }
-}
+};

@@ -12,13 +12,13 @@ export const action = ({ request }: ActionArgs) => {
   return signOut(request);
 };
 
-export async function loader({ request }: LoaderArgs) {
+export const loader = async ({ request }: LoaderArgs) => {
   await requireUserSession(request);
 
   return json({});
-}
+};
 
-export default function Index() {
+const Index = () => {
   return (
     <div className="flex justify-center">
       <div className="rounded-lg p-4 dark:bg-gray-800">
@@ -36,4 +36,6 @@ export default function Index() {
       </div>
     </div>
   );
-}
+};
+
+export default Index;

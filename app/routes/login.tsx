@@ -11,7 +11,7 @@ export const meta: V2_MetaFunction = () => {
   return [{ title: "Login | Crop Planner" }];
 };
 
-export let action = async ({ request }: ActionArgs) => {
+export const action = async ({ request }: ActionArgs) => {
   const formData = await request.formData();
   const email = formData.get("email");
   const password = formData.get("password");
@@ -56,7 +56,7 @@ export let action = async ({ request }: ActionArgs) => {
   return createUserSession(token, "/");
 };
 
-export default function Login() {
+const Login = () => {
   // TODO: Add type
   const actionData = useActionData();
 
@@ -129,4 +129,6 @@ export default function Login() {
       </div>
     </div>
   );
-}
+};
+
+export default Login;

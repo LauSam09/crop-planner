@@ -55,7 +55,7 @@ export const action = async ({ request }: ActionArgs) => {
   return await createUserSession(token, "/");
 };
 
-export default function SignUp() {
+const SignUp = () => {
   // TODO: Add type
   const actionData = useActionData();
 
@@ -127,4 +127,6 @@ export default function SignUp() {
       </div>
     </div>
   );
-}
+};
+
+export default SignUp;

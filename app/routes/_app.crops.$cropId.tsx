@@ -24,7 +24,7 @@ export const loader = async ({ request, params }: ActionArgs) => {
   return json({ data });
 };
 
-function compareSowingDate(sowingA: Sowing, sowingB: Sowing) {
+const compareSowingDate = (sowingA: Sowing, sowingB: Sowing) => {
   const sowingADate = sowingA.stages[sowingA.currentStage]!.date;
   const sowingBDate = sowingB.stages[sowingB.currentStage]!.date;
 
@@ -35,9 +35,9 @@ function compareSowingDate(sowingA: Sowing, sowingB: Sowing) {
   }
 
   return -1;
-}
+};
 
-function compareSowings(sowingA: Sowing, sowingB: Sowing) {
+const compareSowings = (sowingA: Sowing, sowingB: Sowing) => {
   switch (sowingA.currentStage) {
     case "planning":
       switch (sowingB.currentStage) {
@@ -65,9 +65,9 @@ function compareSowings(sowingA: Sowing, sowingB: Sowing) {
           return compareSowingDate(sowingA, sowingB);
       }
   }
-}
+};
 
-export default function CropDetails() {
+const CropDetails = () => {
   const { data } = useLoaderData<typeof loader>();
   const { cropId } = useParams();
 
@@ -94,4 +94,6 @@ export default function CropDetails() {
       )}
     </div>
   );
-}
+};
+
+export default CropDetails;

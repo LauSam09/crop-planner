@@ -25,7 +25,10 @@ const storage = createCookieSessionStorage({
   },
 });
 
-export async function createUserSession(idToken: string, redirectTo: string) {
+export const createUserSession = async (
+  idToken: string,
+  redirectTo: string
+) => {
   const token = await getSessionToken(idToken);
   const session = await storage.getSession();
   session.set("token", token);
@@ -35,9 +38,9 @@ export async function createUserSession(idToken: string, redirectTo: string) {
       "Set-Cookie": await storage.commitSession(session),
     },
   });
-}
+};
 
-export async function getUserSession(request: Request) {
+export const getUserSession = async (request: Request) => {
   const cookieSession = await storage.getSession(request.headers.get("Cookie"));
   const token = cookieSession.get("token");
   if (!token) {
@@ -50,9 +53,9 @@ export async function getUserSession(request: Request) {
     console.error(error);
     return null;
   }
-}
+};
 
-export async function requireUserSession(request: Request) {
+export const requireUserSession = async (request: Request) => {
   const session = await getUserSession(request);
 
   if (!session) {
@@ -60,16 +63,16 @@ export async function requireUserSession(request: Request) {
   }
 
   return session;
-}
+};
 
-export async function destroySession(request: Request) {
+export const destroySession = async (request: Request) => {
   const session = await storage.getSession(request.headers.get("Cookie"));
   const newCookie = await storage.destroySession(session);
 
   return redirect("/login", { headers: { "Set-Cookie": newCookie } });
-}
+};
 
-export async function signOut(request: Request) {
+export const signOut = async (request: Request) => {
   await signOutFirebase();
   return await destroySession(request);
-}
+};
