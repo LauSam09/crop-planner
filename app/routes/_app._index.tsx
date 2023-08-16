@@ -1,13 +1,8 @@
-import {
-  redirect,
-  type ActionArgs,
-  type LoaderArgs,
-  json,
-} from "@remix-run/node";
+import { type ActionArgs, type LoaderArgs, json } from "@remix-run/node";
 import type { V2_MetaFunction } from "@remix-run/react";
 import { Form } from "@remix-run/react";
 
-import { getUserSession, signOut } from "~/utils/session.server";
+import { requireUserSession, signOut } from "~/utils/session.server";
 
 export const meta: V2_MetaFunction = () => {
   return [{ title: "Crop Planner" }];
@@ -18,12 +13,7 @@ export const action = ({ request }: ActionArgs) => {
 };
 
 export async function loader({ request }: LoaderArgs) {
-  // TODO: https://remix.run/docs/en/1.19.3/pages/faq#how-can-i-have-a-parent-route-loader-validate-the-user-and-protect-all-child-routes
-  const user = await getUserSession(request);
-
-  if (!user) {
-    return redirect("/login");
-  }
+  await requireUserSession(request);
 
   return json({});
 }

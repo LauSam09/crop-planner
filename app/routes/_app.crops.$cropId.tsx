@@ -1,5 +1,5 @@
 import type { ActionArgs } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import type { V2_MetaFunction } from "@remix-run/react";
 import { Link, useLoaderData, useParams } from "@remix-run/react";
 import { isBefore, isSameDay } from "date-fns";
@@ -7,21 +7,16 @@ import { isBefore, isSameDay } from "date-fns";
 import SowingDetails from "~/components/SowingDetails";
 import { fetchCrop } from "~/data/crops";
 import type { Sowing } from "~/models/crop";
-import { getUserSession } from "~/utils/session.server";
+import { requireUserSession } from "~/utils/session.server";
 
 export const meta: V2_MetaFunction = () => {
   return [{ title: "Crop Planner" }];
 };
 
 export const loader = async ({ request, params }: ActionArgs) => {
-  // TODO: https://remix.run/docs/en/1.19.3/pages/faq#how-can-i-have-a-parent-route-loader-validate-the-user-and-protect-all-child-routes
-  const user = await getUserSession(request);
+  const user = await requireUserSession(request);
 
-  if (!user) {
-    return redirect("/login");
-  }
-
-  const data = await fetchCrop(user!.uid, params.cropId!);
+  const data = await fetchCrop(user.uid, params.cropId!);
 
   data.sowings = data.sowings.map((s, index) => ({ ...s, index }));
   data.sowings.sort(compareSowings);

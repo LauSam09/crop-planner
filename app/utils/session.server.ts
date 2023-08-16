@@ -52,6 +52,16 @@ export async function getUserSession(request: Request) {
   }
 }
 
+export async function requireUserSession(request: Request) {
+  const session = await getUserSession(request);
+
+  if (!session) {
+    throw redirect("/login");
+  }
+
+  return session;
+}
+
 export async function destroySession(request: Request) {
   const session = await storage.getSession(request.headers.get("Cookie"));
   const newCookie = await storage.destroySession(session);
