@@ -153,6 +153,7 @@ export async function addSowing(
 ) {
   if (process.env.MOCKING) {
     crops[cropId].sowings.push(sowing);
+    return;
   }
 
   const querySnapshot = await db.collection("crops").doc(cropId).get();

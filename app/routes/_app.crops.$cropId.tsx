@@ -2,9 +2,11 @@ import type { ActionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import type { V2_MetaFunction } from "@remix-run/react";
 import { Link, useLoaderData, useParams } from "@remix-run/react";
+import { isBefore, isSameDay } from "date-fns";
 
 import SowingDetails from "~/components/SowingDetails";
 import { fetchCrop } from "~/data/crops";
+import type { Sowing } from "~/models/crop";
 import { getUserSession } from "~/utils/session.server";
 
 export const meta: V2_MetaFunction = () => {
@@ -21,8 +23,54 @@ export const loader = async ({ request, params }: ActionArgs) => {
 
   const data = await fetchCrop(user!.uid, params.cropId!);
 
+  data.sowings = data.sowings.map((s, index) => ({ ...s, index }));
+  data.sowings.sort(compareSowings);
+
   return json({ data });
 };
+
+function compareSowingDate(sowingA: Sowing, sowingB: Sowing) {
+  const sowingADate = sowingA.stages[sowingA.currentStage]!.date;
+  const sowingBDate = sowingB.stages[sowingB.currentStage]!.date;
+
+  if (isSameDay(sowingADate, sowingBDate)) {
+    return 0;
+  } else if (isBefore(sowingADate, sowingBDate)) {
+    return 1;
+  }
+
+  return -1;
+}
+
+function compareSowings(sowingA: Sowing, sowingB: Sowing) {
+  switch (sowingA.currentStage) {
+    case "planning":
+      switch (sowingB.currentStage) {
+        case "planning":
+          return compareSowingDate(sowingA, sowingB);
+        case "growing":
+        case "storing":
+          return -1;
+      }
+    case "growing":
+      switch (sowingB.currentStage) {
+        case "planning":
+          return 1;
+        case "growing":
+          return compareSowingDate(sowingA, sowingB);
+        case "storing":
+          return -1;
+      }
+    case "storing":
+      switch (sowingB.currentStage) {
+        case "planning":
+        case "growing":
+          return 1;
+        case "storing":
+          return compareSowingDate(sowingA, sowingB);
+      }
+  }
+}
 
 export default function CropDetails() {
   const { data } = useLoaderData<typeof loader>();

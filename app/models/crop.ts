@@ -34,6 +34,10 @@ export interface Sowing {
   };
 }
 
+export type SowingViewModel = Sowing & {
+  index: number;
+};
+
 export interface CropEntity {
   id: string;
   name: string;
