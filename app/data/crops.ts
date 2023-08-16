@@ -1,4 +1,5 @@
-import type { Crop, CropEntity, Sowing } from "~/models/crop";
+import { firestore } from "firebase-admin";
+import type { Crop, CropEntity, Sowing, SowingEntity } from "~/models/crop";
 import { db } from "~/utils/firebase.server";
 
 const carrots: Crop = {
@@ -153,4 +154,29 @@ export async function addSowing(
   if (process.env.MOCKING) {
     crops[cropId].sowings.push(sowing);
   }
+
+  const querySnapshot = await db.collection("crops").doc(cropId).get();
+
+  const cropEntity = querySnapshot.data() as CropEntity;
+
+  if (!cropEntity || cropEntity.userId !== userId) {
+    throw new Error("Crop not found");
+  }
+
+  const sowingEntity: SowingEntity = {
+    created: firestore.Timestamp.fromDate(sowing.created),
+    currentStage: sowing.currentStage,
+    stages: {
+      planning: {
+        date: firestore.Timestamp.fromDate(sowing.stages.planning!.date),
+      },
+    },
+  };
+
+  await db
+    .collection("crops")
+    .doc(cropId)
+    .update({
+      sowings: [...cropEntity.sowings, sowingEntity],
+    });
 }
