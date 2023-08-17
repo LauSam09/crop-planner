@@ -5,6 +5,7 @@ import { Link, useLoaderData } from "@remix-run/react";
 
 import { Sowing } from "~/components/Sowing";
 import { fetchCrops } from "~/data/crops";
+import { compareSowings } from "~/utils/crops";
 import { requireUserSession } from "~/utils/session.server";
 
 export const meta: V2_MetaFunction = () => {
@@ -14,6 +15,8 @@ export const meta: V2_MetaFunction = () => {
 export const loader = async ({ request }: ActionArgs) => {
   const user = await requireUserSession(request);
   const data = await fetchCrops(user!.uid);
+
+  data.forEach((c) => c.sowings.sort(compareSowings));
 
   return json({
     data,
