@@ -5,7 +5,6 @@ import { Link, useLoaderData, useParams } from "@remix-run/react";
 
 import SowingDetails from "~/components/SowingDetails";
 import { fetchCrop } from "~/data/crops";
-import { compareSowings } from "~/utils/crops";
 import { requireUserSession } from "~/utils/session.server";
 
 export const meta: V2_MetaFunction = () => {
@@ -15,9 +14,6 @@ export const meta: V2_MetaFunction = () => {
 export const loader = async ({ request, params }: ActionArgs) => {
   const user = await requireUserSession(request);
   const data = await fetchCrop(user.uid, params.cropId!);
-
-  data.sowings = data.sowings.map((s, index) => ({ ...s, index }));
-  data.sowings.sort(compareSowings);
 
   return json({ data });
 };
@@ -36,7 +32,7 @@ const CropDetails = () => {
       {data.sowings.length > 0 ? (
         <ul>
           {data.sowings.map((sowing, i) => (
-            <Link to={`/crops/${cropId}/sowings/${i}`} key={i}>
+            <Link to={`/crops/${cropId}/sowings/${sowing.id}`} key={sowing.id}>
               <SowingDetails
                 number={data.sowings.length - i}
                 currentStage={sowing.currentStage}

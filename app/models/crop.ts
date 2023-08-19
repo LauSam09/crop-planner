@@ -3,6 +3,7 @@ import type { firestore } from "firebase-admin";
 export type Stage = "planning" | "growing" | "storing";
 
 export interface SowingEntity {
+  id: number;
   created: firestore.Timestamp;
   currentStage: Stage;
   stages: {
@@ -19,6 +20,7 @@ export interface SowingEntity {
 }
 
 export interface Sowing {
+  id: number;
   created: Date;
   currentStage: Stage;
   stages: {

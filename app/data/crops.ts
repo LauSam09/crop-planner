@@ -1,5 +1,6 @@
 import { firestore } from "firebase-admin";
 import type { Crop, CropEntity, Sowing, SowingEntity } from "~/models/crop";
+import { compareSowings } from "~/utils/crops";
 import { db } from "~/utils/firebase.server";
 
 const carrots: Crop = {
@@ -9,6 +10,7 @@ const carrots: Crop = {
   userId: "1",
   sowings: [
     {
+      id: 3,
       created: new Date("2023-01-01T09:00:00Z"),
       currentStage: "planning",
       stages: {
@@ -18,6 +20,7 @@ const carrots: Crop = {
       },
     },
     {
+      id: 2,
       created: new Date("2023-01-01T09:00:00Z"),
       currentStage: "growing",
       stages: {
@@ -30,6 +33,7 @@ const carrots: Crop = {
       },
     },
     {
+      id: 1,
       created: new Date("2023-01-01T09:00:00Z"),
       currentStage: "storing",
       stages: {
@@ -54,6 +58,7 @@ const potatoes: Crop = {
   userId: "1",
   sowings: [
     {
+      id: 1,
       created: new Date("2023-01-01T09:00:00Z"),
       currentStage: "planning",
       stages: {
@@ -118,13 +123,16 @@ export const fetchCrops = async (userId: string) => {
     .where("userId", "==", userId)
     .get();
 
-  const data: Array<CropEntity> = [];
+  const cropEntities: Array<CropEntity> = [];
 
-  querySnapshot.forEach((doc) =>
-    data.push({ ...doc.data(), id: doc.id } as CropEntity),
-  );
+  querySnapshot.forEach((doc) => {
+    cropEntities.push({ ...doc.data(), id: doc.id } as CropEntity);
+  });
 
-  return data.map(mapFn);
+  const crops = cropEntities.map(mapFn);
+  crops.forEach((c) => c.sowings.sort(compareSowings));
+
+  return crops;
 };
 
 export const fetchCrop = async (userId: string, cropId: string) => {
@@ -143,13 +151,16 @@ export const fetchCrop = async (userId: string, cropId: string) => {
     throw new Error("Crop not found");
   }
 
-  return mapFn(cropEntity);
+  const crop = mapFn(cropEntity);
+  crop.sowings.sort(compareSowings);
+
+  return crop;
 };
 
 export async function addSowing(
   userId: string,
   cropId: string,
-  sowing: Sowing,
+  sowing: Sowing
 ) {
   if (process.env.MOCKING) {
     crops[cropId].sowings.push(sowing);
@@ -164,7 +175,10 @@ export async function addSowing(
     throw new Error("Crop not found");
   }
 
+  const id = Math.max(...cropEntity.sowings.map((s) => s.id), 0) + 1;
+
   const sowingEntity: SowingEntity = {
+    id,
     created: firestore.Timestamp.fromDate(sowing.created),
     currentStage: sowing.currentStage,
     stages: {

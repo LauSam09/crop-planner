@@ -15,11 +15,13 @@ export const loader = async ({ request, params }: ActionArgs) => {
   const user = await requireUserSession(request);
   const data = await fetchCrop(user.uid, params.cropId!);
 
-  if (data.sowings.length <= +params.sowingId!) {
+  const sowing = data.sowings.find((s) => s.id === +params.sowingId!);
+
+  if (!sowing) {
     throw new Response(null, { status: 404, statusText: "Not Found" });
   }
 
-  return json({ ...data.sowings[+params.sowingId!] });
+  return json(sowing);
 };
 
 const formatStage = (stage: Stage) => {
