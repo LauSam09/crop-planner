@@ -79,7 +79,7 @@ const cauliflower: Crop = {
   sowings: [],
 };
 
-const crops: { [key: string]: Crop } = {
+const mockCrops: { [key: string]: Crop } = {
   "1": carrots,
   "2": potatoes,
   "3": cauliflower,
@@ -116,7 +116,7 @@ const mapFn = (entity: CropEntity): Crop => ({
 
 export const fetchCrops = async (userId: string) => {
   if (process.env.MOCKING) {
-    return [carrots, potatoes, cauliflower];
+    return Object.values(mockCrops);
   }
 
   const querySnapshot = await db
@@ -138,7 +138,7 @@ export const fetchCrops = async (userId: string) => {
 
 export const fetchCrop = async (userId: string, cropId: string) => {
   if (process.env.MOCKING) {
-    return crops[cropId];
+    return mockCrops[cropId];
   }
 
   const querySnapshot = await db.collection("crops").doc(cropId).get();
@@ -164,8 +164,8 @@ export const addSowing = async (
   sowing: Omit<Sowing, "id">
 ) => {
   if (process.env.MOCKING) {
-    const id = Math.max(...crops[cropId].sowings.map((s) => s.id), 0) + 1;
-    crops[cropId].sowings.push({ ...sowing, id });
+    const id = Math.max(...mockCrops[cropId].sowings.map((s) => s.id), 0) + 1;
+    mockCrops[cropId].sowings.push({ ...sowing, id });
     return;
   }
 
@@ -204,7 +204,7 @@ export const deleteSowing = async (
   sowingId: number
 ) => {
   if (process.env.MOCKING) {
-    const crop = crops[cropId];
+    const crop = mockCrops[cropId];
     const sowing = crop?.sowings.find((s) => s.id === sowingId);
 
     if (!crop || !sowing) {
@@ -215,8 +215,8 @@ export const deleteSowing = async (
     return;
   }
 
-  const querySnapshot = await db.collection("crops").doc(cropId).get();
-  const cropEntity = querySnapshot.data() as CropEntity;
+  const documentSnapshot = await db.collection("crops").doc(cropId).get();
+  const cropEntity = documentSnapshot.data() as CropEntity;
   const sowing = cropEntity?.sowings.find((s) => s.id === sowingId);
 
   if (!cropEntity || cropEntity.userId !== userId || !sowing) {
@@ -229,4 +229,26 @@ export const deleteSowing = async (
     .update({
       sowings: cropEntity.sowings.filter((s) => s.id !== sowingId),
     });
+};
+
+export const deleteCrop = async (userId: string, cropId: string) => {
+  if (process.env.MOCKING) {
+    const crop = mockCrops[cropId];
+
+    if (!crop) {
+      throw new Error("Crop not found");
+    }
+
+    delete mockCrops[cropId];
+    return;
+  }
+
+  const documentSnapshot = await db.collection("crops").doc(cropId).get();
+  const cropEntity = documentSnapshot.data() as CropEntity;
+
+  if (!cropEntity || cropEntity.userId !== userId) {
+    throw new Error("Crop not found");
+  }
+
+  await db.collection("crops").doc(cropId).delete();
 };

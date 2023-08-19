@@ -1,21 +1,29 @@
-import type { ActionArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
+import type { ActionArgs, LoaderArgs } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
 import type { V2_MetaFunction } from "@remix-run/react";
-import { Link, useLoaderData, useParams } from "@remix-run/react";
+import { Form, Link, useLoaderData, useParams } from "@remix-run/react";
 
 import SowingDetails from "~/components/SowingDetails";
-import { fetchCrop } from "~/data/crops";
+import { deleteCrop, fetchCrop } from "~/data/crops";
 import { requireUserSession } from "~/utils/session.server";
 
 export const meta: V2_MetaFunction = () => {
   return [{ title: "Crop Planner" }];
 };
 
-export const loader = async ({ request, params }: ActionArgs) => {
+export const loader = async ({ request, params }: LoaderArgs) => {
   const user = await requireUserSession(request);
   const data = await fetchCrop(user.uid, params.cropId!);
 
   return json({ data });
+};
+
+export const action = async ({ request, params: { cropId } }: ActionArgs) => {
+  const user = await requireUserSession(request);
+
+  await deleteCrop(user.uid, cropId!);
+
+  return redirect("/crops");
 };
 
 const CropDetails = () => {
@@ -24,7 +32,16 @@ const CropDetails = () => {
 
   return (
     <div className="mx-auto flex max-w-lg flex-col gap-2">
-      <h1 className="text-xl">{data.name}</h1>
+      <div className="flex justify-between">
+        <h1 className="text-xl">{data.name}</h1>
+        <div>
+          <Form method="post">
+            <button className="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">
+              Delete
+            </button>
+          </Form>
+        </div>
+      </div>
       <div className="flex justify-between">
         <h2 className="text-lg">Sowings</h2>
         <Link to={`/crops/${cropId}/new-sowing`}>New</Link>
