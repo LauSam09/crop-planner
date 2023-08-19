@@ -33,6 +33,14 @@ const Index = () => {
 
   return (
     <div className="mx-auto flex max-w-lg flex-col gap-4 p-2">
+      <div className="flex justify-end">
+        <Link
+          to="/crops/new"
+          className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
+        >
+          New
+        </Link>
+      </div>
       {data.map((crop) => (
         <Link key={crop.id} to={`/crops/${crop.id}`}>
           <div className="rounded border border-gray-200 p-2 text-center dark:border-gray-700 dark:bg-gray-800">

@@ -41,7 +41,7 @@ export type SowingViewModel = Sowing & {
 };
 
 export interface CropEntity {
-  id: string;
+  id: string; // TODO: Shouldn't have ID
   name: string;
   created: firestore.Timestamp;
   userId: string;

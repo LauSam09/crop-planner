@@ -44,7 +44,12 @@ const CropDetails = () => {
       </div>
       <div className="flex justify-between">
         <h2 className="text-lg">Sowings</h2>
-        <Link to={`/crops/${cropId}/new-sowing`}>New</Link>
+        <Link
+          to={`/crops/${cropId}/new-sowing`}
+          className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
+        >
+          New
+        </Link>
       </div>
       {data.sowings.length > 0 ? (
         <ul>

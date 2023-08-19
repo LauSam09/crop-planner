@@ -252,3 +252,29 @@ export const deleteCrop = async (userId: string, cropId: string) => {
 
   await db.collection("crops").doc(cropId).delete();
 };
+
+export const addCrop = async (userId: string, crop: Pick<Crop, "name">) => {
+  if (process.env.MOCKING) {
+    const id = Math.max(...Object.values(mockCrops).map((c) => +c.id), 0) + 1;
+
+    mockCrops[id] = {
+      id: String(id),
+      name: crop.name,
+      created: new Date(),
+      sowings: [],
+      userId: "1",
+    };
+
+    return id;
+  }
+
+  const cropEntity: Omit<CropEntity, "id"> = {
+    userId,
+    created: firestore.Timestamp.now(),
+    name: crop.name,
+    sowings: [],
+  };
+
+  const documentReference = await db.collection("crops").add(cropEntity);
+  return documentReference.id;
+};
