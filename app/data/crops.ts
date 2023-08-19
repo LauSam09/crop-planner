@@ -278,3 +278,79 @@ export const addCrop = async (userId: string, crop: Pick<Crop, "name">) => {
   const documentReference = await db.collection("crops").add(cropEntity);
   return documentReference.id;
 };
+
+export const progressCrop = async (
+  userId: string,
+  cropId: string,
+  sowingId: number
+  /* TODO: Add stage metadata */
+) => {
+  if (process.env.MOCKING) {
+    const crop = mockCrops[cropId];
+    const sowing = crop?.sowings.find((s) => s.id === sowingId);
+
+    if (!crop || !sowing) {
+      throw new Error("Sowing not found");
+    }
+
+    // TODO: Factor out this logic
+    switch (sowing.currentStage) {
+      case "planning": {
+        sowing.currentStage = "growing";
+        sowing.stages.growing = {
+          date: new Date(),
+        };
+        break;
+      }
+      case "growing": {
+        sowing.currentStage = "storing";
+        sowing.stages.storing = {
+          date: new Date(),
+        };
+        break;
+      }
+      case "storing": {
+        throw new Error(
+          "progressCrop was invoked for a crop that is already being stored"
+        );
+      }
+    }
+
+    return;
+  }
+
+  const documentSnapshot = await db.collection("crops").doc(cropId).get();
+  const cropEntity = documentSnapshot.data() as CropEntity;
+  const sowing = cropEntity?.sowings.find((s) => s.id === sowingId);
+
+  if (!cropEntity || cropEntity.userId !== userId || !sowing) {
+    throw new Error("Sowing not found");
+  }
+
+  // TODO: Factor out this logic
+  switch (sowing.currentStage) {
+    case "planning": {
+      sowing.currentStage = "growing";
+      sowing.stages.growing = {
+        date: firestore.Timestamp.now(),
+      };
+      break;
+    }
+    case "growing": {
+      sowing.currentStage = "storing";
+      sowing.stages.storing = {
+        date: firestore.Timestamp.now(),
+      };
+      break;
+    }
+    case "storing": {
+      throw new Error(
+        "progressCrop was invoked for a crop that is already being stored"
+      );
+    }
+  }
+
+  await db.collection("crops").doc(cropId).update({
+    sowings: cropEntity.sowings,
+  });
+};

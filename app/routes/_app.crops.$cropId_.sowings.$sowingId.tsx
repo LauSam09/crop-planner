@@ -9,7 +9,7 @@ import { Form, useLoaderData } from "@remix-run/react";
 import classNames from "classnames";
 import { format } from "date-fns";
 
-import { deleteSowing, fetchCrop } from "~/data/crops";
+import { deleteSowing, fetchCrop, progressCrop } from "~/data/crops";
 import type { Stage } from "~/models/crop";
 import { requireUserSession } from "~/utils/session.server";
 
@@ -35,10 +35,19 @@ export const action = async ({
   params: { cropId, sowingId },
 }: ActionArgs) => {
   const user = await requireUserSession(request);
+  const formData = await request.formData();
+  const intent = formData.get("intent");
 
-  await deleteSowing(user.uid, cropId!, +sowingId!);
-
-  return redirect(`/crops/${cropId}`);
+  switch (intent) {
+    case "delete":
+      await deleteSowing(user.uid, cropId!, +sowingId!);
+      return redirect(`/crops/${cropId}`);
+    case "progress":
+      await progressCrop(user.uid, cropId!, +sowingId!);
+      return null;
+    default:
+      throw new Error("Unexpected action");
+  }
 };
 
 const formatStage = (stage: Stage) => {
@@ -86,18 +95,34 @@ const SowingDetails = () => {
     <div className="mx-auto max-w-md">
       <section>
         <h2>Actions</h2>
-        <div className="flex justify-end gap-2">
-          {hasNextStage && (
-            <button className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600">
-              {formStageImperative(nextStage as Stage)}
-            </button>
-          )}
-          <Form method="post">
-            <button className="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">
+        <Form method="post">
+          <div className="flex justify-end gap-2">
+            {hasNextStage && (
+              <button
+                name="intent"
+                value="progress"
+                className={classNames(
+                  "rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2",
+                  {
+                    "bg-green-600 focus-visible:outline-green-600 hover:bg-green-500":
+                      nextStage === "growing",
+                    "bg-orange-500 focus-visible:outline-orange-500 hover:bg-orange-400":
+                      nextStage === "storing",
+                  }
+                )}
+              >
+                {formStageImperative(nextStage as Stage)}
+              </button>
+            )}
+            <button
+              name="intent"
+              value="delete"
+              className="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
+            >
               Delete
             </button>
-          </Form>
-        </div>
+          </div>
+        </Form>
       </section>
       <section>
         <h2>Stages</h2>
