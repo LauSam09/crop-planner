@@ -21,7 +21,7 @@ export const validatePassword = (password: FormDataEntryValue | null) => {
 };
 
 export const validatePasswordRequirements = (
-  password: FormDataEntryValue | null
+  password: FormDataEntryValue | null,
 ) => {
   if (!password) {
     return "Password is required";

@@ -17,27 +17,27 @@ const handleRequest = (
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
-  remixContext: EntryContext
+  remixContext: EntryContext,
 ) =>
   isbot(request.headers.get("user-agent"))
     ? handleBotRequest(
         request,
         responseStatusCode,
         responseHeaders,
-        remixContext
+        remixContext,
       )
     : handleBrowserRequest(
         request,
         responseStatusCode,
         responseHeaders,
-        remixContext
+        remixContext,
       );
 
 const handleBotRequest = (
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
-  remixContext: EntryContext
+  remixContext: EntryContext,
 ) =>
   new Promise((resolve, reject) => {
     const { pipe, abort } = renderToPipeableStream(
@@ -56,7 +56,7 @@ const handleBotRequest = (
             new Response(body, {
               headers: responseHeaders,
               status: responseStatusCode,
-            })
+            }),
           );
 
           pipe(body);
@@ -68,7 +68,7 @@ const handleBotRequest = (
           responseStatusCode = 500;
           console.error(error);
         },
-      }
+      },
     );
 
     setTimeout(abort, ABORT_DELAY);
@@ -78,7 +78,7 @@ const handleBrowserRequest = (
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
-  remixContext: EntryContext
+  remixContext: EntryContext,
 ) =>
   new Promise((resolve, reject) => {
     const { pipe, abort } = renderToPipeableStream(
@@ -97,7 +97,7 @@ const handleBrowserRequest = (
             new Response(body, {
               headers: responseHeaders,
               status: responseStatusCode,
-            })
+            }),
           );
 
           pipe(body);
@@ -109,7 +109,7 @@ const handleBrowserRequest = (
           console.error(error);
           responseStatusCode = 500;
         },
-      }
+      },
     );
 
     setTimeout(abort, ABORT_DELAY);

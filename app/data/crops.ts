@@ -121,7 +121,7 @@ export const fetchCrops = async (userId: string) => {
   const data: Array<CropEntity> = [];
 
   querySnapshot.forEach((doc) =>
-    data.push({ ...doc.data(), id: doc.id } as CropEntity)
+    data.push({ ...doc.data(), id: doc.id } as CropEntity),
   );
 
   return data.map(mapFn);
@@ -149,7 +149,7 @@ export const fetchCrop = async (userId: string, cropId: string) => {
 export async function addSowing(
   userId: string,
   cropId: string,
-  sowing: Sowing
+  sowing: Sowing,
 ) {
   if (process.env.MOCKING) {
     crops[cropId].sowings.push(sowing);
