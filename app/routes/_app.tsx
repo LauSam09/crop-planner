@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, Outlet } from "@remix-run/react";
+import { Link, NavLink, Outlet } from "@remix-run/react";
 import classNames from "classnames";
 
 const Layout = () => {
@@ -44,6 +44,10 @@ const Layout = () => {
                   Crop Planner
                 </span>
               </Link>
+              {/* 
+                TODO: Add avatar with dropdown to sign out
+                https://flowbite.com/docs/components/avatar/
+              */}
             </div>
           </div>
         </nav>
@@ -53,28 +57,42 @@ const Layout = () => {
             "fixed left-0 top-0 h-screen w-64 border-r z-40 border-gray-200 bg-white pt-20 transition-transform dark:border-gray-700 dark:bg-gray-800 sm:translate-x-0",
             {
               "-translate-x-full": !mobileSidebarOpen,
-            },
+            }
           )}
         >
           <div className="h-full overflow-y-auto px-3 pb-4 ">
             <ul className="space-y-2 font-medium">
               <li>
-                <Link
+                <NavLink
                   to="/"
                   onClick={closeMobileSideBar}
-                  className="flex rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                  className={({ isActive }) =>
+                    classNames(
+                      "flex rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700",
+                      {
+                        "bg-gray-100/80 dark:bg-gray-700/60": isActive,
+                      }
+                    )
+                  }
                 >
                   Dashboard
-                </Link>
+                </NavLink>
               </li>
               <li>
-                <Link
+                <NavLink
                   to="/crops"
                   onClick={closeMobileSideBar}
-                  className="flex rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                  className={({ isActive }) =>
+                    classNames(
+                      "flex rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700",
+                      {
+                        "bg-gray-100/80 dark:bg-gray-700/60": isActive,
+                      }
+                    )
+                  }
                 >
                   Crops
-                </Link>
+                </NavLink>
               </li>
             </ul>
           </div>
@@ -84,7 +102,7 @@ const Layout = () => {
           onClick={closeMobileSideBar}
           className={classNames(
             "absolute z-30 h-full w-full bg-gray-900/50 sm:hidden cursor-pointer",
-            { hidden: !mobileSidebarOpen },
+            { hidden: !mobileSidebarOpen }
           )}
         >
           <span className="sr-only">Sidebar backdrop</span>
