@@ -3,7 +3,7 @@ import type { LoaderArgs, ActionArgs } from "@remix-run/node";
 import { Form, useActionData, type V2_MetaFunction } from "@remix-run/react";
 
 import { addSowing } from "~/data/crops";
-import { getUserSession, requireUserSession } from "~/utils/session.server";
+import { requireUserSession } from "~/utils/session.server";
 import { validateDate, validateStage } from "~/utils/validation.server";
 
 export const meta: V2_MetaFunction = () => {
@@ -30,9 +30,9 @@ export const action = async ({ request, params: { cropId } }: ActionArgs) => {
     return json({ errors, values: { stage, date } });
   }
 
-  const user = await getUserSession(request);
+  const user = await requireUserSession(request);
 
-  await addSowing(user!.uid, cropId!, {
+  await addSowing(user.uid, cropId!, {
     created: new Date(),
     currentStage: "planning",
     stages: { planning: { date: new Date(date as string) } },

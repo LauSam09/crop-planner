@@ -1,9 +1,15 @@
-import { json, type ActionArgs, type V2_MetaFunction } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import {
+  json,
+  type ActionArgs,
+  type V2_MetaFunction,
+  type LoaderArgs,
+  redirect,
+} from "@remix-run/node";
+import { Form, useLoaderData } from "@remix-run/react";
 import classNames from "classnames";
 import { format } from "date-fns";
 
-import { fetchCrop } from "~/data/crops";
+import { deleteSowing, fetchCrop } from "~/data/crops";
 import type { Stage } from "~/models/crop";
 import { requireUserSession } from "~/utils/session.server";
 
@@ -11,7 +17,7 @@ export const meta: V2_MetaFunction = () => {
   return [{ title: "Crop Planner" }];
 };
 
-export const loader = async ({ request, params }: ActionArgs) => {
+export const loader = async ({ request, params }: LoaderArgs) => {
   const user = await requireUserSession(request);
   const data = await fetchCrop(user.uid, params.cropId!);
 
@@ -22,6 +28,17 @@ export const loader = async ({ request, params }: ActionArgs) => {
   }
 
   return json(sowing);
+};
+
+export const action = async ({
+  request,
+  params: { cropId, sowingId },
+}: ActionArgs) => {
+  const user = await requireUserSession(request);
+
+  await deleteSowing(user.uid, cropId!, +sowingId!);
+
+  return redirect(`/crops/${cropId}`);
 };
 
 const formatStage = (stage: Stage) => {
@@ -75,9 +92,11 @@ const SowingDetails = () => {
               {formStageImperative(nextStage as Stage)}
             </button>
           )}
-          <button className="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">
-            Delete
-          </button>
+          <Form method="post">
+            <button className="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600">
+              Delete
+            </button>
+          </Form>
         </div>
       </section>
       <section>

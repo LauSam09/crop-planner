@@ -1,4 +1,5 @@
 import { firestore } from "firebase-admin";
+
 import type { Crop, CropEntity, Sowing, SowingEntity } from "~/models/crop";
 import { compareSowings } from "~/utils/crops";
 import { db } from "~/utils/firebase.server";
@@ -157,13 +158,14 @@ export const fetchCrop = async (userId: string, cropId: string) => {
   return crop;
 };
 
-export async function addSowing(
+export const addSowing = async (
   userId: string,
   cropId: string,
-  sowing: Sowing
-) {
+  sowing: Omit<Sowing, "id">
+) => {
   if (process.env.MOCKING) {
-    crops[cropId].sowings.push(sowing);
+    const id = Math.max(...crops[cropId].sowings.map((s) => s.id), 0) + 1;
+    crops[cropId].sowings.push({ ...sowing, id });
     return;
   }
 
@@ -194,4 +196,37 @@ export async function addSowing(
     .update({
       sowings: [...cropEntity.sowings, sowingEntity],
     });
-}
+};
+
+export const deleteSowing = async (
+  userId: string,
+  cropId: string,
+  sowingId: number
+) => {
+  if (process.env.MOCKING) {
+    const crop = crops[cropId];
+    const sowing = crop?.sowings.find((s) => s.id === sowingId);
+
+    if (!crop || !sowing) {
+      throw new Error("Sowing not found");
+    }
+
+    crop.sowings = crop.sowings.filter((s) => s.id !== sowingId);
+    return;
+  }
+
+  const querySnapshot = await db.collection("crops").doc(cropId).get();
+  const cropEntity = querySnapshot.data() as CropEntity;
+  const sowing = cropEntity?.sowings.find((s) => s.id === sowingId);
+
+  if (!cropEntity || cropEntity.userId !== userId || !sowing) {
+    throw new Error("Sowing not found");
+  }
+
+  await db
+    .collection("crops")
+    .doc(cropId)
+    .update({
+      sowings: cropEntity.sowings.filter((s) => s.id !== sowingId),
+    });
+};
