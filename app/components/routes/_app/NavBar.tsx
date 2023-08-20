@@ -1,5 +1,5 @@
 import { Link, Form } from "@remix-run/react";
-import { Dropdown, Avatar } from "flowbite-react";
+import { Dropdown, Avatar, DarkThemeToggle } from "flowbite-react";
 
 import { ToggleButton } from "./ToggleButton";
 
@@ -36,9 +36,14 @@ export const NavBar = ({
                 </span>
               </Dropdown.Header>
             )}
+            <div className="w-full text-center">
+              {/* TODO: Fix this to correctly detect device value */}
+              <DarkThemeToggle />
+            </div>
+            <Dropdown.Divider />
             <button
               type="submit"
-              className="block w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200"
+              className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700"
             >
               Sign out
             </button>

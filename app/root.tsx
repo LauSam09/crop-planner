@@ -7,6 +7,8 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 import type { ActionArgs, LinksFunction } from "@remix-run/node";
+import { Flowbite } from "flowbite-react";
+
 import stylesheet from "~/tailwind.css";
 import { signOut } from "./utils/session.server";
 
@@ -31,10 +33,12 @@ export default function App() {
         <Links />
       </head>
       <body className="text-gray-900 dark:bg-gray-900 dark:text-white">
-        <Outlet />
-        <ScrollRestoration />
-        <Scripts />
-        <LiveReload />
+        <Flowbite>
+          <Outlet />
+          <ScrollRestoration />
+          <Scripts />
+          <LiveReload />
+        </Flowbite>
       </body>
     </html>
   );
