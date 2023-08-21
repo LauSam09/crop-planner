@@ -13,6 +13,7 @@
     "deploy": "gcloud run deploy crop-planner-web --source . --region europe-north1"
   },
   "dependencies": {
+    "@floating-ui/react": "^0.25.1",
     "@remix-run/node": "^1.15.0",
     "@remix-run/react": "^1.15.0",
     "@remix-run/serve": "^1.15.0",
