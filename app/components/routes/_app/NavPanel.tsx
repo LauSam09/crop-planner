@@ -23,22 +23,6 @@ export const NavPanel = ({
         <ul className="space-y-2 font-medium">
           <li>
             <NavLink
-              to="/"
-              onClick={closeMobileSidebar}
-              className={({ isActive }) =>
-                classNames(
-                  "flex rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700",
-                  {
-                    "bg-gray-100/80 dark:bg-gray-700/60": isActive,
-                  }
-                )
-              }
-            >
-              Dashboard
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
               to="/crops"
               onClick={closeMobileSidebar}
               className={({ isActive }) =>
