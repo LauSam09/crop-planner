@@ -2,8 +2,8 @@ import type { ActionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import type { V2_MetaFunction } from "@remix-run/react";
 import { Link, useLoaderData } from "@remix-run/react";
+import SowingDetails from "~/components/SowingDetails";
 
-import { Sowing } from "~/components/Sowing";
 import { fetchCrops } from "~/data/crops";
 import { requireUserSession } from "~/utils/session.server";
 
@@ -50,24 +50,33 @@ const Index = () => {
         </Link>
       </div>
       {data.map((crop) => (
-        <Link key={crop.id} to={`/crops/${crop.id}`}>
+        <div key={crop.id}>
           <div className="rounded border border-gray-200 p-2 text-center dark:border-gray-700 dark:bg-gray-800">
-            <p className="text-lg">{crop.name}</p>
+            <Link
+              to={`/crops/${crop.id}`}
+              className="block w-full rounded p-1 text-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+            >
+              {crop.name}
+            </Link>
             {crop.sowings.length === 0 ? (
               <p>No sowings yet</p>
             ) : (
-              <div className="mt-2 space-y-2">
+              <div className="mt-2 flex flex-col gap-2">
                 {crop.sowings.map((sowing, index) => (
-                  <Sowing
+                  <Link
                     key={index}
-                    currentStage={sowing.currentStage}
-                    stages={sowing.stages}
-                  />
+                    to={`/crops/${crop.id}/sowings/${sowing.id}`}
+                  >
+                    <SowingDetails
+                      currentStage={sowing.currentStage}
+                      date={new Date(sowing.stages[sowing.currentStage]!.date!)}
+                    />
+                  </Link>
                 ))}
               </div>
             )}
           </div>
-        </Link>
+        </div>
       ))}
     </div>
   );

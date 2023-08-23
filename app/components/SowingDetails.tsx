@@ -1,13 +1,14 @@
+import classNames from "classnames";
 import { format, isFuture, differenceInWeeks, isThisWeek } from "date-fns";
+
 import type { Stage } from "~/models/crop";
 
-interface SowingDetailProps {
-  number: number;
+export interface SowingDetailProps {
   currentStage: Stage;
   date: Date;
 }
 
-const SowingDetails = ({ number, currentStage, date }: SowingDetailProps) => {
+const SowingDetails = ({ currentStage, date }: SowingDetailProps) => {
   const today = new Date();
   let text: string;
 
@@ -40,19 +41,28 @@ const SowingDetails = ({ number, currentStage, date }: SowingDetailProps) => {
 
   switch (currentStage) {
     case "growing":
-      text = `Growing since ${formattedDate} (${interval})`;
+      text = `Planted ${interval} (${formattedDate})`;
       break;
     case "planning":
-      text = `Planned for ${formattedDate} (${interval})`;
+      text = `Plant ${interval} (${formattedDate})`;
       break;
     case "storing":
-      text = `Harvested on ${formattedDate} (${interval})`;
+      text = `Harvested ${interval} (${formattedDate})`;
       break;
   }
 
   return (
-    <div>
-      {number}: {text}
+    <div
+      className={classNames("rounded border p-1 text-center", {
+        "border-blue-500 bg-blue-500/40 hover:bg-blue-500/30 dark:hover:bg-blue-500/50":
+          currentStage === "planning",
+        "border-green-500 bg-green-500/40 hover:bg-green-500/30 dark:hover:bg-green-500/50":
+          currentStage === "growing",
+        "border-orange-500 bg-orange-500/40 hover:bg-orange-500/30 dark:hover:bg-orange-500/50":
+          currentStage === "storing",
+      })}
+    >
+      {text}
     </div>
   );
 };

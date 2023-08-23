@@ -48,15 +48,14 @@ const CropDetails = () => {
           to={`/crops/${cropId}/new-sowing`}
           className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
         >
-          New
+          Add sowing
         </Link>
       </div>
       {data.sowings.length > 0 ? (
-        <ul>
+        <ul className="flex flex-col gap-2">
           {data.sowings.map((sowing, i) => (
             <Link to={`/crops/${cropId}/sowings/${sowing.id}`} key={sowing.id}>
               <SowingDetails
-                number={data.sowings.length - i}
                 currentStage={sowing.currentStage}
                 date={new Date(sowing.stages[sowing.currentStage]!.date!)}
               />
