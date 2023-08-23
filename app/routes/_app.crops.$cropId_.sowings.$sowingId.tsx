@@ -53,11 +53,11 @@ export const action = async ({
 const formatStage = (stage: Stage) => {
   switch (stage) {
     case "planning":
-      return "Planned";
+      return "Planned for";
     case "growing":
-      return "Growing";
+      return "Planted";
     case "storing":
-      return "Storing";
+      return "Harvested";
   }
 };
 
@@ -74,7 +74,6 @@ const formStageImperative = (stage: Stage) => {
 
 const SowingDetails = () => {
   const { currentStage, stages } = useLoaderData<typeof loader>();
-  const orderedStages = Object.entries(stages).reverse();
 
   const hasNextStage = currentStage !== "storing";
   let nextStage: Stage | undefined;
@@ -91,8 +90,13 @@ const SowingDetails = () => {
       break;
   }
 
+  const currentStageValues = stages[currentStage];
+  const previousStages = Object.entries(stages)
+    .filter(([stage]) => stage !== currentStage && stage !== "planning")
+    .reverse();
+
   return (
-    <div className="mx-auto max-w-md">
+    <div className="mx-auto max-w-md space-y-2">
       <section>
         <h2>Actions</h2>
         <Form method="post">
@@ -124,22 +128,43 @@ const SowingDetails = () => {
           </div>
         </Form>
       </section>
-      <section>
-        <h2>Stages</h2>
-        <div className="flex flex-col gap-2">
-          {orderedStages.map(([stage, values]) => (
-            <div
-              key={stage}
-              className={classNames("flex flex-col", {
-                "font-bold": stage === currentStage,
-              })}
-            >
-              <span>{formatStage(stage as Stage)}</span>
-              <span>{format(new Date(values.date), "dd/MM/yy")}</span>
-            </div>
-          ))}
+      <section className="space-y-1">
+        <h2>Current Stage</h2>
+        <div
+          className={classNames("flex flex-col rounded p-2", {
+            "border-blue-500 bg-blue-500/40": currentStage === "planning",
+            "border-green-500 bg-green-500/40": currentStage === "growing",
+            "border-orange-500 bg-orange-500/40": currentStage === "storing",
+          })}
+        >
+          <span>
+            {formatStage(currentStage)}{" "}
+            {format(new Date(currentStageValues!.date), "dd/MM/yy")}
+          </span>
         </div>
       </section>
+      {previousStages.length > 0 && (
+        <section className="space-y-1">
+          <h2>Previous stages</h2>
+          <div className="flex flex-col gap-2">
+            {previousStages.map(([stage, values]) => (
+              <div
+                key={stage}
+                className={classNames("flex flex-col rounded p-2", {
+                  "border-blue-500 bg-blue-500/40": stage === "planning",
+                  "border-green-500 bg-green-500/40": stage === "growing",
+                  "border-orange-500 bg-orange-500/40": stage === "storing",
+                })}
+              >
+                <span>
+                  {formatStage(stage as Stage)}{" "}
+                  {format(new Date(values.date), "dd/MM/yy")}
+                </span>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
     </div>
   );
 };
