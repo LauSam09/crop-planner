@@ -131,7 +131,7 @@ const SowingDetails = () => {
       <section className="space-y-1">
         <h2>Current Stage</h2>
         <div
-          className={classNames("flex flex-col rounded p-2", {
+          className={classNames("flex flex-col rounded p-2 border", {
             "border-blue-500 bg-blue-500/40": currentStage === "planning",
             "border-green-500 bg-green-500/40": currentStage === "growing",
             "border-orange-500 bg-orange-500/40": currentStage === "storing",
@@ -150,7 +150,7 @@ const SowingDetails = () => {
             {previousStages.map(([stage, values]) => (
               <div
                 key={stage}
-                className={classNames("flex flex-col rounded p-2", {
+                className={classNames("flex flex-col rounded p-2 border", {
                   "border-blue-500 bg-blue-500/40": stage === "planning",
                   "border-green-500 bg-green-500/40": stage === "growing",
                   "border-orange-500 bg-orange-500/40": stage === "storing",
