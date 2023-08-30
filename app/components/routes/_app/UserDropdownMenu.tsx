@@ -7,6 +7,8 @@ import {
 import { Form } from "@remix-run/react";
 import { useState } from "react";
 
+import { version } from "../../../../package.json";
+
 export type UserDropdownMenuProps = {
   email: string | undefined;
 };
@@ -53,6 +55,9 @@ export const UserDropdownMenu = ({ email }: UserDropdownMenuProps) => {
                 Sign out
               </button>
             </Form>
+          </div>
+          <div className="px-2 py-1 text-right text-xs text-gray-700 dark:text-gray-200">
+            v{version}
           </div>
         </div>
       )}
