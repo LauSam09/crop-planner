@@ -46,7 +46,7 @@ export const action = async ({
       return redirect(`/crops/${cropId}`);
     case "progress":
       await progressCrop(user.uid, cropId!, +sowingId!);
-      return null;
+      return json({ successful: true });
     default:
       throw new Error("Unexpected action");
   }
