@@ -45,7 +45,10 @@ export const action = async ({
       await deleteSowing(user.uid, cropId!, +sowingId!);
       return redirect(`/crops/${cropId}`);
     case "progress":
-      await progressCrop(user.uid, cropId!, +sowingId!);
+      const date = formData.get("date")
+        ? new Date(formData.get("date") as string)
+        : new Date();
+      await progressCrop(user.uid, cropId!, +sowingId!, date);
       return json({ successful: true });
     default:
       throw new Error("Unexpected action");

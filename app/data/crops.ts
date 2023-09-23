@@ -282,7 +282,8 @@ export const addCrop = async (userId: string, crop: Pick<Crop, "name">) => {
 export const progressCrop = async (
   userId: string,
   cropId: string,
-  sowingId: number
+  sowingId: number,
+  date: Date = new Date()
   /* TODO: Add stage metadata */
 ) => {
   if (process.env.MOCKING) {
@@ -298,14 +299,14 @@ export const progressCrop = async (
       case "planning": {
         sowing.currentStage = "growing";
         sowing.stages.growing = {
-          date: new Date(),
+          date,
         };
         break;
       }
       case "growing": {
         sowing.currentStage = "storing";
         sowing.stages.storing = {
-          date: new Date(),
+          date,
         };
         break;
       }
@@ -332,14 +333,14 @@ export const progressCrop = async (
     case "planning": {
       sowing.currentStage = "growing";
       sowing.stages.growing = {
-        date: firestore.Timestamp.now(),
+        date: firestore.Timestamp.fromDate(date),
       };
       break;
     }
     case "growing": {
       sowing.currentStage = "storing";
       sowing.stages.storing = {
-        date: firestore.Timestamp.now(),
+        date: firestore.Timestamp.fromDate(date),
       };
       break;
     }

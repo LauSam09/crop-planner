@@ -26,9 +26,9 @@ export const Actions = ({ currentStage }: ActionsProps) => {
   return (
     <section>
       <h2>Actions</h2>
-      <Form method="post">
-        <div className="flex justify-end gap-2">
-          {hasNextStage && <NextStageDialog nextStage={nextStage!} />}
+      <div className="flex justify-end gap-2">
+        {hasNextStage && <NextStageDialog nextStage={nextStage!} />}
+        <Form method="post">
           <button
             name="intent"
             value="delete"
@@ -36,8 +36,8 @@ export const Actions = ({ currentStage }: ActionsProps) => {
           >
             Delete
           </button>
-        </div>
-      </Form>
+        </Form>
+      </div>
     </section>
   );
 };

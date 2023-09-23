@@ -7,8 +7,9 @@ import {
   FloatingOverlay,
   FloatingFocusManager,
 } from "@floating-ui/react";
-import { useActionData, useNavigation } from "@remix-run/react";
+import { Form, useActionData, useNavigation } from "@remix-run/react";
 import classNames from "classnames";
+import { format } from "date-fns";
 import { useEffect, useState } from "react";
 
 import type { Stage } from "~/models/crop";
@@ -72,27 +73,40 @@ export const NextStageDialog = ({ nextStage }: NextStageDialogProps) => {
               {...getFloatingProps()}
               className="mt-24 bg-white p-4 dark:bg-gray-800 sm:ml-72 sm:mr-8"
             >
-              <div className="flex flex-row justify-end gap-2">
-                <button type="button" onClick={() => setIsOpen(false)}>
-                  Cancel
-                </button>
-                <button
-                  name="intent"
-                  value="progress"
-                  type="submit"
-                  className={classNames(
-                    "rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2",
-                    {
-                      "bg-green-600 focus-visible:outline-green-600 hover:bg-green-500":
-                        nextStage === "growing",
-                      "bg-orange-500 focus-visible:outline-orange-500 hover:bg-orange-400":
-                        nextStage === "storing",
-                    }
-                  )}
-                >
-                  {formStageImperative(nextStage)}
-                </button>
-              </div>
+              <Form method="post">
+                <label htmlFor="date" className="flex flex-col">
+                  Date
+                  <input
+                    id="date"
+                    name="date"
+                    type="date"
+                    max={format(new Date(), "yyyy-MM-dd")}
+                    defaultValue={format(new Date(), "yyyy-MM-dd")}
+                    className="rounded border p-1 dark:border-0 dark:bg-gray-800"
+                  />
+                </label>
+                <div className="mt-2 flex flex-row justify-end gap-2">
+                  <button type="button" onClick={() => setIsOpen(false)}>
+                    Cancel
+                  </button>
+                  <button
+                    name="intent"
+                    value="progress"
+                    type="submit"
+                    className={classNames(
+                      "rounded-md px-3 py-2 text-sm font-semibold text-white shadow-sm  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2",
+                      {
+                        "bg-green-600 focus-visible:outline-green-600 hover:bg-green-500":
+                          nextStage === "growing",
+                        "bg-orange-500 focus-visible:outline-orange-500 hover:bg-orange-400":
+                          nextStage === "storing",
+                      }
+                    )}
+                  >
+                    {formStageImperative(nextStage)}
+                  </button>
+                </div>
+              </Form>
             </div>
           </FloatingFocusManager>
         </FloatingOverlay>
