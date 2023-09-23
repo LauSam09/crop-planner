@@ -1,17 +1,17 @@
 ﻿import { FirebaseError } from "@firebase/app";
 import { Form, Link, useActionData } from "@remix-run/react";
-import type { ActionArgs, V2_MetaFunction } from "@remix-run/node";
+import type { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 
 import { signIn } from "~/utils/firebase.server";
 import { createUserSession } from "~/utils/session.server";
 import { validateEmail, validatePassword } from "~/utils/validation.server";
 
-export const meta: V2_MetaFunction = () => {
+export const meta: MetaFunction = () => {
   return [{ title: "Login | Crop Planner" }];
 };
 
-export const action = async ({ request }: ActionArgs) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
   const email = formData.get("email");
   const password = formData.get("password");
@@ -19,6 +19,7 @@ export const action = async ({ request }: ActionArgs) => {
   const errors = {
     email: validateEmail(email),
     password: validatePassword(password),
+    form: false,
   };
 
   if (Object.values(errors).some(Boolean)) {
@@ -45,7 +46,7 @@ export const action = async ({ request }: ActionArgs) => {
           throw err;
       }
 
-      return json({ errors: { form: message }, values: { email } });
+      return json({ errors: { ...errors, form: message }, values: { email } });
     }
 
     throw err;
@@ -57,8 +58,7 @@ export const action = async ({ request }: ActionArgs) => {
 };
 
 const Login = () => {
-  // TODO: Add type
-  const actionData = useActionData();
+  const actionData = useActionData<typeof action>();
 
   return (
     <div className="flex h-screen items-center justify-center dark:bg-gray-900">
@@ -82,7 +82,7 @@ const Login = () => {
               <input
                 type="email"
                 name="email"
-                defaultValue={actionData?.values.email}
+                defaultValue={actionData?.values?.email?.toString() ?? ""}
                 className="mt-1 block w-full rounded-md border px-2 py-1.5 text-gray-900 shadow-sm outline-none placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-600 sm:text-sm sm:leading-6"
               />
             </label>

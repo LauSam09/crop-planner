@@ -1,17 +1,17 @@
-import type { ActionArgs } from "@remix-run/node";
+import type { ActionFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import type { V2_MetaFunction } from "@remix-run/react";
+import type { MetaFunction } from "@remix-run/react";
 import { Link, useLoaderData } from "@remix-run/react";
 import SowingDetails from "~/components/SowingDetails";
 
 import { fetchCrops } from "~/data/crops";
 import { requireUserSession } from "~/utils/session.server";
 
-export const meta: V2_MetaFunction = () => {
+export const meta: MetaFunction = () => {
   return [{ title: "Crop Planner" }];
 };
 
-export const loader = async ({ request }: ActionArgs) => {
+export const loader = async ({ request }: ActionFunctionArgs) => {
   const user = await requireUserSession(request);
   const data = await fetchCrops(user!.uid);
 

@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { Outlet, useLoaderData } from "@remix-run/react";
-import { type LoaderArgs, json } from "@remix-run/node";
+import { type LoaderFunctionArgs, json } from "@remix-run/node";
 
 import { requireUserSession } from "~/utils/session.server";
 import { Main, NavBar, NavPanel } from "~/components/routes/_app";
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await requireUserSession(request);
 
   return json({ email: user.email });

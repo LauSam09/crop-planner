@@ -1,5 +1,5 @@
 ﻿import { Form, Link, useActionData } from "@remix-run/react";
-import type { ActionArgs, V2_MetaFunction } from "@remix-run/node";
+import type { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { FirebaseError } from "@firebase/app";
 
@@ -10,11 +10,11 @@ import {
   validatePasswordRequirements,
 } from "~/utils/validation.server";
 
-export const meta: V2_MetaFunction = () => {
+export const meta: MetaFunction = () => {
   return [{ title: "Sign up | Crop Planner" }];
 };
 
-export const action = async ({ request }: ActionArgs) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
   const email = formData.get("email");
   const password = formData.get("password");
@@ -22,6 +22,7 @@ export const action = async ({ request }: ActionArgs) => {
   const errors = {
     email: validateEmail(email),
     password: validatePasswordRequirements(password),
+    form: false,
   };
 
   if (Object.values(errors).some(Boolean)) {
@@ -44,7 +45,7 @@ export const action = async ({ request }: ActionArgs) => {
           throw err;
       }
 
-      return json({ errors: { form: message }, values: { email } });
+      return json({ errors: { ...errors, form: message }, values: { email } });
     }
 
     throw err;
@@ -56,8 +57,7 @@ export const action = async ({ request }: ActionArgs) => {
 };
 
 const SignUp = () => {
-  // TODO: Add type
-  const actionData = useActionData();
+  const actionData = useActionData<typeof action>();
 
   return (
     <div className="flex h-screen items-center justify-center dark:bg-gray-900">

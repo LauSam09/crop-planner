@@ -1,22 +1,25 @@
 import { json, redirect } from "@remix-run/node";
-import type { LoaderArgs, ActionArgs } from "@remix-run/node";
-import { Form, useActionData, type V2_MetaFunction } from "@remix-run/react";
+import type { LoaderFunctionArgs, ActionFunctionArgs } from "@remix-run/node";
+import { Form, useActionData, type MetaFunction } from "@remix-run/react";
 
 import { addSowing } from "~/data/crops";
 import { requireUserSession } from "~/utils/session.server";
 import { validateDate, validateStage } from "~/utils/validation.server";
 
-export const meta: V2_MetaFunction = () => {
+export const meta: MetaFunction = () => {
   return [{ title: "Crop Planner" }];
 };
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   await requireUserSession(request);
 
   return json({});
 };
 
-export const action = async ({ request, params: { cropId } }: ActionArgs) => {
+export const action = async ({
+  request,
+  params: { cropId },
+}: ActionFunctionArgs) => {
   const body = await request.formData();
   const stage = body.get("stage");
   const date = body.get("date");

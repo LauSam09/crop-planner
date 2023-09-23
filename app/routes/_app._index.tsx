@@ -1,13 +1,13 @@
-import { type LoaderArgs, redirect } from "@remix-run/node";
-import type { V2_MetaFunction } from "@remix-run/react";
+import { type LoaderFunctionArgs, redirect } from "@remix-run/node";
+import type { MetaFunction } from "@remix-run/react";
 
 import { requireUserSession } from "~/utils/session.server";
 
-export const meta: V2_MetaFunction = () => {
+export const meta: MetaFunction = () => {
   return [{ title: "Crop Planner" }];
 };
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   await requireUserSession(request);
 
   return redirect("/crops");

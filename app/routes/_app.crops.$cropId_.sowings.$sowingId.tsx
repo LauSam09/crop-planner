@@ -1,8 +1,8 @@
 import {
   json,
-  type ActionArgs,
-  type V2_MetaFunction,
-  type LoaderArgs,
+  type ActionFunctionArgs,
+  type MetaFunction,
+  type LoaderFunctionArgs,
   redirect,
 } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
@@ -15,11 +15,11 @@ import {
 import { deleteSowing, fetchCrop, progressCrop } from "~/data/crops";
 import { requireUserSession } from "~/utils/session.server";
 
-export const meta: V2_MetaFunction = () => {
+export const meta: MetaFunction = () => {
   return [{ title: "Crop Planner" }];
 };
 
-export const loader = async ({ request, params }: LoaderArgs) => {
+export const loader = async ({ request, params }: LoaderFunctionArgs) => {
   const user = await requireUserSession(request);
   const data = await fetchCrop(user.uid, params.cropId!);
 
@@ -35,7 +35,7 @@ export const loader = async ({ request, params }: LoaderArgs) => {
 export const action = async ({
   request,
   params: { cropId, sowingId },
-}: ActionArgs) => {
+}: ActionFunctionArgs) => {
   const user = await requireUserSession(request);
   const formData = await request.formData();
   const intent = formData.get("intent");

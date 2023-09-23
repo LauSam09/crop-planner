@@ -1,10 +1,10 @@
-import { type ActionArgs, json, redirect } from "@remix-run/node";
-import { Form, useActionData, type V2_MetaFunction } from "@remix-run/react";
-import { addCrop } from "~/data/crops";
+import { type ActionFunctionArgs, json, redirect } from "@remix-run/node";
+import { Form, useActionData, type MetaFunction } from "@remix-run/react";
 
+import { addCrop } from "~/data/crops";
 import { requireUserSession } from "~/utils/session.server";
 
-export const meta: V2_MetaFunction = () => {
+export const meta: MetaFunction = () => {
   return [{ title: "Crop Planner" }];
 };
 
@@ -18,12 +18,13 @@ const validateName = (name: FormDataEntryValue | null) => {
   }
 };
 
-export const action = async ({ request }: ActionArgs) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
   const body = await request.formData();
   const name = body.get("name");
 
   const errors = {
     name: validateName(name),
+    errors: {},
   };
 
   if (Object.values(errors).some(Boolean)) {
