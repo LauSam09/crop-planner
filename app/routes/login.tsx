@@ -1,5 +1,5 @@
 ﻿import { FirebaseError } from "@firebase/app";
-import { Form, Link, useActionData } from "@remix-run/react";
+import { Form, Link, useActionData, useNavigation } from "@remix-run/react";
 import type { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 
@@ -59,6 +59,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 const Login = () => {
   const actionData = useActionData<typeof action>();
+  const navigation = useNavigation();
+  const isSubmitting = navigation.formAction === "/login";
 
   return (
     <div className="flex h-screen items-center justify-center dark:bg-gray-900">
@@ -83,7 +85,7 @@ const Login = () => {
                 type="email"
                 name="email"
                 defaultValue={actionData?.values?.email?.toString() ?? ""}
-                className="mt-1 block w-full rounded-md border px-2 py-1.5 text-gray-900 shadow-sm outline-none placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-600 sm:text-sm sm:leading-6"
+                className="mt-1 block w-full rounded-md border px-2 py-1.5 text-gray-900 shadow-sm outline-none placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-600 dark:border-gray-700 dark:text-white sm:text-sm sm:leading-6"
               />
             </label>
           </p>
@@ -102,7 +104,7 @@ const Login = () => {
                 type="password"
                 name="password"
                 autoComplete="current-password"
-                className="mt-1 block w-full rounded-md border px-2 py-1.5 text-gray-900 shadow-sm outline-none placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-600 sm:text-sm sm:leading-6"
+                className="mt-1 block w-full rounded-md border px-2 py-1.5 text-gray-900 shadow-sm outline-none placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-600 dark:border-gray-700 dark:text-white sm:text-sm sm:leading-6"
               />
             </label>
           </p>
@@ -120,7 +122,8 @@ const Login = () => {
             </Link>
             <button
               type="submit"
-              className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
+              disabled={isSubmitting}
+              className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 disabled:bg-gray-200"
             >
               Login
             </button>
