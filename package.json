@@ -1,7 +1,7 @@
 {
   "private": true,
   "sideEffects": false,
-  "version": "0.1.2",
+  "version": "0.1.3",
   "scripts": {
     "build": "remix build",
     "dev": "remix dev",
@@ -14,7 +14,7 @@
     "deploy": "gcloud run deploy crop-planner-web --source . --region europe-north1"
   },
   "dependencies": {
-    "@floating-ui/react": "^0.25.1",
+    "@floating-ui/react": "^0.26.0",
     "@remix-run/node": "^2.0.1",
     "@remix-run/react": "^2.0.1",
     "@remix-run/serve": "^2.0.1",
