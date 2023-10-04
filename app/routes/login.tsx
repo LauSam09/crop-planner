@@ -1,11 +1,12 @@
 ﻿import { FirebaseError } from "@firebase/app";
-import { Form, Link, useActionData, useNavigation } from "@remix-run/react";
+import { Form, useActionData, useNavigation } from "@remix-run/react";
 import type { ActionFunctionArgs, MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 
 import { signIn } from "~/utils/firebase.server";
 import { createUserSession } from "~/utils/session.server";
 import { validateEmail, validatePassword } from "~/utils/validation.server";
+import { Button, Error, Input, Label, Link } from "~/components";
 
 export const meta: MetaFunction = () => {
   return [{ title: "Login | Crop Planner" }];
@@ -69,64 +70,39 @@ const Login = () => {
           Login
         </h1>
 
-        <Form method="post">
-          {actionData?.errors.form ? (
-            <p
-              role="alert"
-              className="mt-1 text-sm text-red-600 dark:text-red-500"
-            >
-              {actionData.errors.form}
-            </p>
-          ) : null}
+        <Form method="post" className="flex flex-col gap-2">
+          {actionData?.errors.form && <Error>{actionData.errors.form}</Error>}
           <p>
-            <label className="block text-sm font-medium leading-6 text-gray-900 dark:text-white">
+            <Label>
               Email address
-              <input
+              <Input
                 type="email"
                 name="email"
                 defaultValue={actionData?.values?.email?.toString() ?? ""}
-                className="mt-1 block w-full rounded-md border px-2 py-1.5 text-gray-900 shadow-sm outline-none placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-600 dark:border-gray-700 dark:text-white sm:text-sm sm:leading-6"
               />
-            </label>
+            </Label>
+            {actionData?.errors.email && (
+              <Error>{actionData.errors.email}</Error>
+            )}
           </p>
-          {actionData?.errors.email ? (
-            <p
-              role="alert"
-              className="mt-1 text-sm text-red-600 dark:text-red-500"
-            >
-              {actionData.errors.email}
-            </p>
-          ) : null}
           <p>
-            <label className="mt-2 block text-sm font-medium leading-6 text-gray-900 dark:text-white">
+            <Label>
               Password
-              <input
+              <Input
                 type="password"
                 name="password"
                 autoComplete="current-password"
-                className="mt-1 block w-full rounded-md border px-2 py-1.5 text-gray-900 shadow-sm outline-none placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-600 dark:border-gray-700 dark:text-white sm:text-sm sm:leading-6"
               />
-            </label>
+            </Label>
           </p>
-          {actionData?.errors.password ? (
-            <p className="mt-1 text-sm text-red-600 dark:text-red-500">
-              {actionData.errors.password}
-            </p>
-          ) : null}
-          <div className="mt-2 flex w-full items-center justify-end gap-2">
-            <Link
-              to="/signup"
-              className="rounded-md px-3 py-[6px] font-medium text-green-600 hover:underline focus-visible:outline focus-visible:outline-2 dark:text-green-500"
-            >
-              Create account
-            </Link>
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600 disabled:bg-gray-200"
-            >
+          {actionData?.errors.password && (
+            <Error>{actionData.errors.password}</Error>
+          )}
+          <div className="flex w-full items-center justify-end gap-2">
+            <Link to="/signup">Create account</Link>
+            <Button type="submit" disabled={isSubmitting}>
               Login
-            </button>
+            </Button>
           </div>
         </Form>
       </div>
