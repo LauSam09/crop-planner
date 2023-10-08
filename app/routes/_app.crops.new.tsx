@@ -24,7 +24,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   const errors = {
     name: validateName(name),
-    errors: {},
   };
 
   if (Object.values(errors).some(Boolean)) {
