@@ -132,6 +132,7 @@ export const fetchCrops = async (userId: string) => {
 
   const crops = cropEntities.map(mapFn);
   crops.forEach((c) => c.sowings.sort(compareSowings));
+  crops.reverse();
 
   return crops;
 };
